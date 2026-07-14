@@ -1,0 +1,4 @@
+*.json
+!manifest.webmanifest
+*Backup*
+.DS_Store
