@@ -1,13 +1,43 @@
-# GME HRMS Professional v4.2 PWA
+# CY Smart Worksheet
 
-Upload all files and the `icons` folder to the root of your GitHub Pages repository.
+## Upload to GitHub Pages
 
-## New in v4.2
-- Separate Company Account Expenses ledger for payments made with company funds.
-- Multiple invoice, receipt, PDF and image attachments.
-- Monthly/category/search filtering and CSV export.
-- Dashboard and report totals.
-- Existing v3/v4 JSON backups remain compatible.
+1. Create a new GitHub repository.
+2. Upload these files to the repository root:
+   - `index.html`
+   - `manifest.json`
+   - `sw.js`
+3. Open **Settings → Pages**.
+4. Under **Build and deployment**, choose **Deploy from a branch**.
+5. Select the `main` branch and `/ (root)`.
+6. Save and wait for GitHub to provide the Pages link.
 
-## Privacy
-Do not upload HRMS JSON backups, employee files, invoices or receipts to GitHub. Those records remain in browser storage and exported JSON backups.
+## Main features
+
+- Multiple worksheets
+- Search and open saved worksheets
+- IndexedDB browser storage
+- Manual save and 10-second autosave
+- Add rows and columns in bulk
+- Paste cells copied from Excel
+- SUM, AVERAGE, MIN, MAX and COUNT formulas by column
+- Attachments
+- Excel, CSV, PDF/Print and JSON export
+- Light, dark and GME themes
+- PWA installation and offline support after first visit
+
+## Important storage note
+
+Data is stored inside the browser and device used to open the GitHub Pages site.  
+Use **JSON Backup** to transfer a worksheet to another device or browser.
+
+## Excel export note
+
+Excel export loads SheetJS from a public CDN. The first Excel export requires internet access.
+
+
+## Excel export naming
+
+- Excel filename: `Title_Company Name.xlsx`
+- Excel worksheet tab: the worksheet `Title`
+- Excel automatically limits worksheet tab names to 31 characters. Invalid tab characters are removed.
