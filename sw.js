@@ -1,4 +1,4 @@
-const CACHE="gme-smart-worksheet-v1";
+const CACHE="cy-smart-worksheet-v2";
 const ASSETS=["./","./index.html","./manifest.json"];
 self.addEventListener("install",event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));

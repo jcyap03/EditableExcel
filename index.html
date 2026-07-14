@@ -94,14 +94,14 @@
 <main class="app">
   <div class="topbar">
     <div class="brand">
-      <h1>GME Smart Worksheet</h1>
+      <h1>CY Smart Worksheet</h1>
       <span class="badge">GitHub Pages / PWA</span>
     </div>
     <div class="actions">
       <select id="themeSelect" style="width:auto">
         <option value="light">Light</option>
         <option value="dark">Dark</option>
-        <option value="gme">GME Orange</option>
+        <option value="gme">CY Orange</option>
       </select>
       <button id="installBtn" class="secondary hidden">Install App</button>
     </div>
@@ -214,7 +214,7 @@
 </main>
 
 <script>
-const DB_NAME="CY_Smart_Worksheet_DB";
+const DB_NAME="GME_Smart_Worksheet_DB";
 const DB_VERSION=1;
 const STORE="worksheets";
 let db;
@@ -524,8 +524,22 @@ function exportExcel(){
   const ws=XLSX.utils.aoa_to_sheet(data);
   ws["!cols"]=[{wch:7},...current.headers.map((h,ci)=>({wch:Math.min(Math.max(String(h).length,...current.rows.map(r=>String(r[ci]??"").length),12)+2,40)}))];
   ws["!merges"]=[{s:{r:0,c:0},e:{r:0,c:Math.max(1,current.headers.length)}}];
-  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Worksheet");
-  XLSX.writeFile(wb,`${safeName(current.title)}_${current.date}.xlsx`);
+  const wb=XLSX.utils.book_new();
+
+  // Excel worksheet tab names are limited to 31 characters and
+  // cannot contain: \\ / ? * [ ]
+  const tabName=(current.title||"Worksheet")
+    .replace(/[\\\/\?\*\[\]:]/g," ")
+    .replace(/\s+/g," ")
+    .trim()
+    .slice(0,31) || "Worksheet";
+
+  XLSX.utils.book_append_sheet(wb,ws,tabName);
+
+  // Export filename format: Title_Company Name.xlsx
+  const titlePart=safeName(current.title||"Worksheet");
+  const companyPart=safeName(current.company||"Company");
+  XLSX.writeFile(wb,`${titlePart}_${companyPart}.xlsx`);
 }
 function exportCsv(){
   const rows=[current.headers,...current.rows];

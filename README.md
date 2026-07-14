@@ -1,4 +1,4 @@
-# GME Smart Worksheet
+# CY Smart Worksheet
 
 ## Upload to GitHub Pages
 
@@ -34,3 +34,10 @@ Use **JSON Backup** to transfer a worksheet to another device or browser.
 ## Excel export note
 
 Excel export loads SheetJS from a public CDN. The first Excel export requires internet access.
+
+
+## Excel export naming
+
+- Excel filename: `Title_Company Name.xlsx`
+- Excel worksheet tab: the worksheet `Title`
+- Excel automatically limits worksheet tab names to 31 characters. Invalid tab characters are removed.
