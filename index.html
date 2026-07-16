@@ -135,7 +135,7 @@
         <button id="backBtn">← Worksheets</button>
         <button id="saveBtn" class="primary">Save</button>
         <button id="saveAsBtn">Save As Copy</button>
-        <button id="exportExcelBtn" class="success">Excel</button>
+        <button id="exportExcelBtn" class="success">Excel</button><button id="importExcelBtn">Import Excel</button><input id="importExcelFile" type="file" accept=".xlsx,.xls" hidden>
         <button id="exportCsvBtn" class="success">CSV</button>
         <button id="exportPdfBtn" class="success">PDF / Print</button>
         <button id="exportJsonBtn" class="secondary">JSON Backup</button>
@@ -500,6 +500,50 @@ function addAttachments(files){
   });
 }
 
+
+function importExcelFile(file){
+  const reader = new FileReader();
+
+  reader.onload = async function(e){
+    try{
+      const wb = XLSX.read(e.target.result,{type:"array"});
+      const firstSheet = wb.SheetNames[0];
+      const ws = wb.Sheets[firstSheet];
+      const data = XLSX.utils.sheet_to_json(ws,{header:1,defval:""});
+
+      if(!data.length){
+        alert("Excel file is empty.");
+        return;
+      }
+
+      current = blankWorksheet();
+      current.title = file.name.replace(/\.(xlsx|xls)$/i,"");
+      current.headers = data[0].map((x,i)=>String(x || "Column "+(i+1)));
+
+      current.rows = data.slice(1).map(row=>{
+        let r=[...row];
+        while(r.length < current.headers.length) r.push("");
+        return r.slice(0,current.headers.length);
+      });
+
+      current.modifiedAt = new Date().toISOString();
+
+      await dbPut(current);
+      renderMeta();
+      renderTable();
+      renderAttachments();
+      showEditor();
+
+      alert("Excel imported successfully.");
+    }catch(err){
+      alert("Unable to import Excel file.");
+      console.error(err);
+    }
+  };
+
+  reader.readAsArrayBuffer(file);
+}
+
 function exportExcel(){
   syncMetaToCurrent();
   if(typeof XLSX==="undefined")return alert("Excel library did not load. Check your internet connection.");
@@ -584,6 +628,8 @@ $("toggleFormulaBtn").onclick=toggleFormula;
 $("uploadAttachmentBtn").onclick=()=>$("attachmentFile").click();
 $("attachmentFile").onchange=e=>{addAttachments(e.target.files);e.target.value=""};
 $("exportExcelBtn").onclick=exportExcel;
+$("importExcelBtn").onclick=()=>document.getElementById("importExcelFile").click();
+$("importExcelFile").onchange=e=>{if(e.target.files[0])importExcelFile(e.target.files[0]);e.target.value="";};
 $("exportCsvBtn").onclick=exportCsv;
 $("exportPdfBtn").onclick=()=>{syncMetaToCurrent();document.title=current.title||"Worksheet";window.print()};
 $("exportJsonBtn").onclick=exportJson;

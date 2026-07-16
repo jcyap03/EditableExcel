@@ -41,3 +41,7 @@ Excel export loads SheetJS from a public CDN. The first Excel export requires in
 - Excel filename: `Title_Company Name.xlsx`
 - Excel worksheet tab: the worksheet `Title`
 - Excel automatically limits worksheet tab names to 31 characters. Invalid tab characters are removed.
+
+
+## Excel Import
+Import .xlsx/.xls files. First row becomes headers and remaining rows become worksheet data.
