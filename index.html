@@ -1,1244 +1,653 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>GME HRMS Professional v4.4.1 PWA</title>
-<meta name="theme-color" content="#111111">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="GME HRMS">
-<meta name="description" content="GME Marketing offline-first HRMS for employees, payroll, claims, leave and company records.">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-<style>
-:root{--dark:#111;--line:#111;--light:#efefef;--soft:#fafafa;--yellow:#f6c343;--green:#087a2a;--red:#b00020}
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f5f7;color:#111}
-.app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
-.sidebar{background:#111;color:#fff;padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto}
-.sidebar h1{font-size:18px;margin:0 0 4px}.sidebar p{font-size:12px;color:#ddd;margin:0 0 18px}
-.nav button{width:100%;margin:5px 0;padding:11px;border:0;border-radius:8px;background:#222;color:#fff;text-align:left;font-weight:800;cursor:pointer}
-.nav button.active,.nav button:hover{background:var(--yellow);color:#111}
-.main{padding:18px}.page{display:block}.hidden{display:none!important}
-.card{background:#fff;border:1px solid #ddd;border-radius:10px;box-shadow:0 2px 8px #0001;margin-bottom:14px}
-.card h2{margin:0;padding:14px 16px;border-bottom:1px solid #ddd;font-size:18px}
-.card-body{padding:16px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-label{font-weight:700;font-size:12px;margin-bottom:4px;display:block}
-input,select,textarea{width:100%;padding:9px;border:1px solid #bbb;border-radius:6px;font:inherit;background:#fff}
-input[type=number]{text-align:right}.btn{border:0;border-radius:7px;padding:10px 13px;font-weight:800;cursor:pointer;background:#111;color:#fff;margin:4px 4px 4px 0}
-.btn.yellow{background:var(--yellow);color:#111}.btn.secondary{background:#eee;color:#111;border:1px solid #ccc}.btn.green{background:var(--green)}.btn.red{background:var(--red)}
-.table{width:100%;border-collapse:collapse}.table th,.table td{border:1px solid #ddd;padding:9px;text-align:left}.table th{background:#eee}
-.stat{background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px}.stat b{font-size:24px;display:block}.note{font-size:12px;color:#555}
-
-/* Professional fixed print forms */
-.print-area{display:block}
-.a4{width:210mm;height:297mm;background:#fff;margin:10px auto;padding:9mm;box-shadow:0 3px 12px #0004;border:1px solid #222;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#000}
-.a4-header{display:grid;grid-template-columns:1fr 46mm;gap:8mm;align-items:center;border-bottom:2px solid #111;padding-bottom:5mm;margin-bottom:5mm}
-.a4-company h1{font-size:18pt;margin:0 0 1mm}.a4-company p{font-size:8.8pt;margin:.5mm 0;line-height:1.2}
-.a4-title{border-left:2px solid #111;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:16pt;font-weight:900;line-height:1.05;text-decoration:underline}
-.rule{border:1.2px solid #111;background:#fafafa;padding:3mm;font-size:8.8pt;line-height:1.35;margin-bottom:4mm}.rule ol{margin:1mm 0 0 5mm;padding:0}
-.fx2{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin-bottom:4mm}.fx3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7mm}
-.fbox{border:1.2px solid #111;margin-bottom:4mm}.fhead{background:#eee;border-bottom:1.2px solid #111;font-size:10pt;font-weight:900;padding:2mm 2.5mm}
-.frow{display:grid;grid-template-columns:35mm 1fr;min-height:8mm;border-bottom:1px solid #bbb}.frow:last-child{border-bottom:0}
-.flabel{font-size:8.8pt;font-weight:800;padding:2mm;background:#fafafa}.fval{padding:1.7mm 2mm;font-size:9pt}
-.line{border-bottom:1px dotted #777;min-height:5mm}.multi-line{border-bottom:1px dotted #777;min-height:9mm;margin-bottom:1mm}
-.check-table{width:100%;border-collapse:collapse;font-size:9pt}.check-table td{width:50%;padding:2.2mm 3mm;border:0;vertical-align:middle;white-space:nowrap}
-.boxchk{display:inline-block;width:4mm;height:4mm;border:1.2px solid #111;margin-right:4mm;vertical-align:middle}
-.reason-lines{padding:3mm}.reason-lines .label-line{display:grid;grid-template-columns:35mm 1fr;gap:3mm;font-size:9pt;font-weight:800}
-.signature{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9mm;margin-top:8mm}.sig{border-top:1.4px solid #111;text-align:center;padding-top:2mm;font-size:9pt}.sig small{display:block;font-size:7.5pt;font-style:italic;margin-top:1mm}
-.footer{text-align:center;font-size:7.5pt;color:#444;margin-top:3mm}
-.payslip-grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm}.ptable{width:100%;border-collapse:collapse;font-size:8.6pt;margin-bottom:4mm}.ptable th,.ptable td{border:1.2px solid #111;padding:1.8mm}.ptable th{background:#eee;text-align:left}.right{text-align:right}.total td{font-weight:900;background:#f1f1f1}
-.net{border:2px solid #111;display:grid;grid-template-columns:1fr 42mm;padding:3mm;font-weight:900}.net .amt{text-align:right;font-size:16pt}
-.blankline{display:inline-block;border-bottom:1px dotted #777;min-width:48mm;height:4mm}
-@page{size:A4 portrait;margin:0}
-@media print{
- body{background:#fff}.sidebar,.no-print,.card:not(.print-area),.nav{display:none!important}.app,.main{display:block;padding:0}
- .page{display:none!important}.page.printing{display:block!important}
- .a4{margin:0;width:210mm;height:297mm;box-shadow:none;border:0}
-}
-@media(max-width:800px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.grid2,.grid3{grid-template-columns:1fr}.main{padding:10px}}
-
-/* Employment Contract compact A4 alignment */
-.contract-a4{padding:6.5mm;overflow:hidden}
-.contract-a4 .a4-header{grid-template-columns:minmax(0,1fr) 39mm;gap:5mm;padding-bottom:3mm;margin-bottom:2.4mm}
-.contract-a4 .a4-company{min-width:0}
-.contract-a4 .a4-company h1{font-size:15pt;margin:0 0 .6mm}
-.contract-a4 .a4-company p{font-size:7.5pt;line-height:1.12;margin:.35mm 0;overflow-wrap:anywhere}
-.contract-a4 .a4-title{font-size:13pt;line-height:1.02}
-.contract-section{border:1px solid #111;margin-bottom:2mm;min-width:0;break-inside:avoid}
-.contract-section-title{background:#eee;border-bottom:1px solid #111;font-size:8.2pt;font-weight:900;padding:1.15mm 1.8mm}
-.contract-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2mm;margin-bottom:2mm;align-items:start}
-.contract-grid>.contract-section{margin-bottom:0}
-.contract-row{display:grid;grid-template-columns:29mm minmax(0,1fr);min-height:5.7mm;border-bottom:1px solid #bbb}
-.contract-row:last-child{border-bottom:0}
-.contract-label{font-size:7.2pt;font-weight:800;padding:1.15mm 1.4mm;background:#fafafa;line-height:1.12}
-.contract-value{min-width:0;padding:1.05mm 1.4mm;font-size:7.35pt;line-height:1.15;overflow-wrap:anywhere;word-break:break-word}
-.contract-line{border-bottom:1px dotted #777;min-height:3.7mm;overflow-wrap:anywhere;word-break:break-word}
-.contract-text{padding:1.55mm 2mm;font-size:7.15pt;line-height:1.22;overflow-wrap:anywhere}
-.contract-text ol{margin:0 0 0 4mm;padding:0}
-.contract-text li{margin:0 0 .55mm}
-.contract-remarks{padding:1.7mm 2mm;font-size:7.2pt;overflow-wrap:anywhere}
-.contract-remarks .multi-line{min-height:4.5mm;margin-bottom:.5mm}
-.contract-signature{display:grid;grid-template-columns:1fr 1fr;gap:12mm;margin-top:4.5mm}
-.contract-signature .sig{font-size:7.8pt;padding-top:1.5mm}
-.contract-signature .sig small{font-size:6.7pt}
-.contract-a4 .footer{font-size:6.6pt;margin-top:1.4mm}
-@media(max-width:800px){
- .contract-grid{grid-template-columns:1fr}
- .contract-a4{width:210mm!important;min-width:210mm!important}
-}
-@media print{
- .contract-a4{padding:6.5mm!important;height:297mm!important}
- .contract-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
-}
-
-
-/* Backup Manager */
-.backup-modal{position:fixed;inset:0;background:rgba(0,0,0,.58);display:none;align-items:center;justify-content:center;z-index:9999;padding:18px}
-.backup-modal.open{display:flex}
-.backup-dialog{width:min(680px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:14px;box-shadow:0 18px 60px rgba(0,0,0,.35)}
-.backup-dialog h3{margin:0;padding:18px 20px;background:#111;color:#fff;font-size:19px}
-.backup-dialog .content{padding:20px;line-height:1.45}
-.backup-dialog .actions{padding:0 20px 20px;display:flex;gap:9px;flex-wrap:wrap}
-.backup-dialog .actions .btn{flex:1;min-width:135px}
-.backup-status{padding:12px;border-radius:8px;background:#f3f3f3;font-size:13px}
-.backup-status.good{background:#e7f6eb;color:#075f25;border:1px solid #acd8b8}
-.backup-status.warn{background:#fff4d8;color:#6b4c00;border:1px solid #efd07b}
-.backup-manager-btn{margin-top:14px!important;background:#f6c343!important;color:#111!important;text-align:center!important}
-.backup-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0}
-.backup-info{border:1px solid #ddd;border-radius:9px;padding:12px;background:#fafafa}
-.backup-info small{display:block;color:#666;font-weight:700;margin-bottom:4px}
-.backup-info b{font-size:15px;word-break:break-word}
-.backup-history{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
-.backup-history th,.backup-history td{border:1px solid #ddd;padding:7px;text-align:left}
-.backup-history th{background:#eee}
-.backup-badge{display:inline-block;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:800;background:#eee}
-.backup-badge.good{background:#dff4e5;color:#075f25}.backup-badge.warn{background:#fff0c4;color:#6b4c00}
-@media(max-width:600px){.backup-grid{grid-template-columns:1fr}}
-
-
-/* v4.0 PWA and mobile improvements */
-.mobile-topbar{display:none;position:sticky;top:0;z-index:1000;background:#111;color:#fff;padding:10px 12px;align-items:center;justify-content:space-between;box-shadow:0 2px 8px #0004}
-.mobile-topbar strong{font-size:15px}.menu-toggle{border:1px solid #555;background:#222;color:#fff;border-radius:8px;padding:8px 11px;font-weight:900}.pwa-state{font-size:11px;color:#ddd}
-.install-card{border:1px solid #efd07b;background:#fff8e4;border-radius:10px;padding:12px;margin-top:14px}.install-card b{display:block;margin-bottom:4px}.install-card .btn{margin-top:8px}
-.stat small{display:block;color:#666;margin-top:4px}.stat-wide{grid-column:span 2}
-.payroll-basis{background:#eef7f0;border:1px solid #b9d9c0;border-radius:8px;padding:10px 12px;margin:10px 0;font-size:12px;line-height:1.45}
-.table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.table{min-width:680px}
-.offline-banner{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:10000;background:#7a2500;color:#fff;padding:9px 14px;border-radius:999px;font-size:12px;font-weight:800;box-shadow:0 4px 18px #0005}.offline-banner.show{display:block}
-@media(max-width:800px){
- body{padding-top:0}.mobile-topbar{display:flex}.sidebar{position:fixed;left:0;top:0;bottom:0;width:min(86vw,330px);height:100vh;z-index:1200;transform:translateX(-105%);transition:transform .22s ease;box-shadow:8px 0 30px #0007}.sidebar.open{transform:translateX(0)}
- .sidebar h1{padding-right:38px}.main{padding:10px 10px 84px}.card{border-radius:12px}.card h2{font-size:17px}.card-body{padding:12px}.grid2,.grid3{grid-template-columns:1fr}.stat-wide{grid-column:auto}
- .nav button{padding:13px 12px;font-size:14px}.btn{min-height:42px}.a4{transform-origin:top left;max-width:none}.table-wrap{margin:0 -2px}
- input,select,textarea{font-size:16px;min-height:42px}textarea{min-height:90px}
-}
-@media(max-width:480px){.backup-dialog .actions .btn{min-width:100%}.stat b{font-size:21px}}
-
-
-/* v4.1 mobile app experience */
-.mobile-bottom-nav{display:none}
-.dashboard-welcome{background:linear-gradient(135deg,#111,#2b2b2b);color:#fff;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 8px 24px #0002}
-.dashboard-welcome h2{margin:0 0 5px;font-size:22px}.dashboard-welcome p{margin:0;color:#ddd;font-size:13px}
-.print-area{display:none}.print-area.preview-open{display:block}
-.preview-toolbar{display:none;gap:8px;flex-wrap:wrap;margin:10px 0 14px;padding:10px;background:#fff;border:1px solid #ddd;border-radius:10px}
-.preview-toolbar.show{display:flex}
-@media(max-width:800px){
- body{padding-bottom:74px}.main{padding:10px 10px 18px}.card{border-radius:14px}.card h2{font-size:17px;padding:13px 14px}.card-body{padding:13px}
- .mobile-topbar{padding:11px 13px}.mobile-topbar strong{font-size:14px}
- .grid3,.grid2{gap:10px}label{font-size:13px}input,select,textarea{min-height:44px;font-size:16px;padding:10px 11px}
- textarea{min-height:88px}.btn{min-height:44px;padding:10px 12px;border-radius:10px;font-size:13px}
- .table{display:block;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
- .stat{padding:14px;border-radius:14px}.stat b{font-size:22px}
- .mobile-bottom-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:1100;background:#fff;border-top:1px solid #ddd;box-shadow:0 -3px 15px #0002;padding:6px 5px max(6px,env(safe-area-inset-bottom))}
- .mobile-bottom-nav button{border:0;background:transparent;padding:5px 2px;color:#555;font-size:10px;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:2px}
- .mobile-bottom-nav button span{font-size:20px;line-height:1}.mobile-bottom-nav button.active{color:#111}
- .a4{transform-origin:top left;transform:scale(.43);margin:8px 0 -167mm 0;box-shadow:0 2px 10px #0003}
- .preview-toolbar{position:sticky;top:58px;z-index:20}
-}
-@media(min-width:801px){.print-area{display:block}}
-
-
-/* Company Account Expense Ledger */
-.ledger-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
-.ledger-summary .stat{min-height:88px}.attachment-list{display:flex;gap:6px;flex-wrap:wrap}
-.file-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border:1px solid #ccc;border-radius:999px;background:#fafafa;font-size:11px;font-weight:700}
-.filter-bar{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;margin-bottom:12px}
-@media(max-width:800px){.ledger-summary{grid-template-columns:1fr 1fr}.filter-bar{grid-template-columns:1fr 1fr}.filter-bar .btn{width:100%}}
-@media(max-width:480px){.ledger-summary{grid-template-columns:1fr}.filter-bar{grid-template-columns:1fr}}
-
-
-/* v4.5 multilingual language switcher */
-.language-switcher{width:auto;min-width:105px;padding:7px 9px;border-radius:8px;border:1px solid #666;background:#fff;color:#111;font-weight:800;font-size:12px}
-.language-panel{margin:0 0 14px;padding:10px;background:#1d1d1d;border:1px solid #333;border-radius:9px}.language-panel label{color:#ddd;font-size:11px}.language-panel .language-switcher{width:100%;margin-top:5px}
-@media(max-width:800px){.mobile-topbar{gap:7px}.mobile-topbar strong{flex:1}.mobile-topbar .language-switcher{min-width:86px;max-width:96px;padding:7px 5px;font-size:11px}.mobile-topbar .pwa-state{display:none}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="manifest" href="manifest.json">
+  <title>CY Smart Worksheet</title>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <style>
+    :root{
+      --bg:#eef2f7;--panel:#fff;--panel2:#f8fafc;--text:#1e293b;--muted:#64748b;
+      --border:#cbd5e1;--primary:#2563eb;--danger:#dc2626;--success:#15803d;--warning:#d97706;
+      --header:#e2e8f0;--shadow:0 10px 30px rgba(15,23,42,.08);
+    }
+    [data-theme="dark"]{
+      --bg:#0f172a;--panel:#111827;--panel2:#1f2937;--text:#f8fafc;--muted:#94a3b8;
+      --border:#334155;--header:#263244;--shadow:none;
+    }
+    [data-theme="gme"]{
+      --primary:#ea580c;--header:#ffedd5;--bg:#fff7ed;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+    button,input,textarea,select{font:inherit}
+    button{border:0;border-radius:8px;padding:10px 13px;cursor:pointer;font-weight:700;background:#e2e8f0;color:#1e293b}
+    button.primary{background:var(--primary);color:white}
+    button.success{background:var(--success);color:white}
+    button.danger{background:var(--danger);color:white}
+    button.secondary{background:#475569;color:white}
+    button.warning{background:var(--warning);color:white}
+    input,textarea,select{width:100%;border:1px solid var(--border);border-radius:8px;padding:10px;background:var(--panel);color:var(--text);outline:none}
+    input:focus,textarea:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 18%,transparent)}
+    textarea{resize:vertical}
+    .app{max-width:1500px;margin:auto;padding:14px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand h1{margin:0;font-size:25px}
+    .badge{font-size:12px;padding:4px 8px;border-radius:999px;background:var(--header);color:var(--muted)}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:14px;box-shadow:var(--shadow)}
+    .hidden{display:none!important}
+    .dashboard-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+    .searchbar{display:grid;grid-template-columns:1fr 180px;gap:10px;margin:12px 0}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+    .card{border:1px solid var(--border);border-radius:12px;padding:13px;background:var(--panel2)}
+    .card h3{margin:0 0 7px;font-size:18px;word-break:break-word}
+    .card-meta{font-size:13px;color:var(--muted);line-height:1.55}
+    .card-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+    .meta-grid{display:grid;grid-template-columns:2fr 1.5fr 1fr 1fr;gap:10px}
+    .field{display:flex;flex-direction:column;gap:6px}
+    .field label{font-size:13px;font-weight:700;color:var(--muted)}
+    .full{grid-column:1/-1}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:end}
+    .toolgroup{display:flex;gap:7px;flex-wrap:wrap;align-items:end;padding:9px;border:1px solid var(--border);border-radius:10px;background:var(--panel2)}
+    .small{width:96px}
+    .sheet-wrap{overflow:auto;border:1px solid var(--border);border-radius:10px;max-height:60vh;background:var(--panel)}
+    table{border-collapse:collapse;width:100%;min-width:800px;table-layout:fixed}
+    th,td{border:1px solid var(--border);min-width:140px;height:40px;padding:8px;vertical-align:top;word-break:break-word}
+    th{position:sticky;top:0;z-index:2;background:var(--header);text-align:left}
+    th:focus,td:focus{outline:none;box-shadow:inset 0 0 0 2px var(--primary);background:color-mix(in srgb,var(--primary) 8%,var(--panel))}
+    .rowno{width:48px;min-width:48px;max-width:48px;text-align:center;background:var(--panel2);color:var(--muted);font-weight:700;position:sticky;left:0;z-index:1}
+    th.rowno{z-index:3}
+    .total-row td{font-weight:700;background:var(--panel2)}
+    .sum-cell{background:#dcfce7!important;color:#166534}
+    .attachment-list{display:grid;gap:8px;margin-top:10px}
+    .attachment-item{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid var(--border);border-radius:9px;padding:10px;background:var(--panel2)}
+    .attachment-name{font-weight:700;word-break:break-word}
+    .attachment-meta{font-size:12px;color:var(--muted);margin-top:3px}
+    .status{font-size:13px;color:var(--muted)}
+    .notice{display:none;padding:9px 11px;border-radius:8px;background:#dcfce7;color:#166534;font-weight:700;margin-bottom:10px}
+    .empty{padding:25px;text-align:center;color:var(--muted)}
+    @media(max-width:850px){
+      .meta-grid{grid-template-columns:1fr 1fr}.searchbar{grid-template-columns:1fr}.full{grid-column:1/-1}
+    }
+    @media(max-width:600px){
+      .meta-grid{grid-template-columns:1fr}.full{grid-column:auto}.app{padding:9px}.brand h1{font-size:21px}.toolgroup{width:100%}
+    }
+    @media print{
+      @page{size:landscape;margin:10mm}
+      body{background:white}.app{max-width:none;padding:0}
+      .topbar,.toolbar,.editor-actions,.attachment-upload,.notice,.status{display:none!important}
+      .panel{box-shadow:none;border:0;padding:0;margin-bottom:10px}
+      .sheet-wrap{overflow:visible;max-height:none;border:0}
+      table{min-width:0;width:100%;font-size:10px}
+      th,td{min-width:0;height:auto;padding:5px}
+      th,.rowno{position:static}
+      th{background:#e5e7eb!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      input,textarea,select{border:0!important;box-shadow:none!important;padding:0}
+    }
+  </style>
 </head>
 <body>
-<div class="mobile-topbar no-print"><button class="menu-toggle" type="button" onclick="toggleMobileMenu()">☰ Menu</button><strong>GME HRMS v4.5</strong><select id="languageSwitcherMobile" class="language-switcher" onchange="setLanguage(this.value)" aria-label="Language"><option value="en">English</option><option value="ms">Bahasa Melayu</option><option value="zh">中文</option></select><span id="pwaState" class="pwa-state">Ready</span></div>
-<div id="offlineBanner" class="offline-banner">Offline mode — changes remain saved on this device</div>
-<div class="app">
-<aside class="sidebar no-print">
-<h1>GME HRMS Pro v4.2</h1><p>Installable PWA · Offline-first · Existing data kept</p>
-<div class="nav">
-<button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
-<button onclick="showPage('employees',this)">Employee Master</button>
-<button onclick="showPage('contract',this)">Employment Contract</button>
-<button onclick="showPage('payroll',this)">Payroll & Payslip</button>
-<button onclick="showPage('advance',this)">Salary Advance</button>
-<button onclick="showPage('outstation',this)">Outstation Allowance</button>
-<button onclick="showPage('leave',this)">Leave Application</button>
-<button onclick="showPage('exception',this)">Attendance Exception</button>
-<button onclick="showPage('assets',this)">Asset Issue</button>
-<button onclick="showPage('vehicles',this)">Vehicle Assignment</button>
-<button onclick="showPage('expenses',this)">Staff Claims & Expenses</button>
-<button onclick="showPage('companyexpenses',this)">Company Account Expenses</button>
-<button onclick="showPage('blankforms',this)">Blank Forms</button>
-<button onclick="showPage('reports',this)">Reports</button>
-<button onclick="showPage('settings',this)">Settings</button>
-<button class="backup-manager-btn" onclick="openBackupManager()">Backup Manager</button>
-</div>
-</aside>
-<main class="main">
-<section id="dashboard" class="page">
-<div class="dashboard-welcome"><h2 id="welcomeGreeting">Welcome to GME HRMS</h2><p>Manage employees, payroll, claims and company records securely from this device.</p></div>
-<div class="card"><h2>Dashboard</h2><div class="card-body">
-<div class="grid3"><div class="stat"><b id="statEmployees">0</b>Active Employees</div><div class="stat"><b id="statAdvances">0</b>Salary Advance Records</div><div class="stat"><b id="statLeaves">0</b>Leave Records</div><div class="stat"><b id="statOutstations">0</b>Outstation Records</div><div class="stat"><b id="statExceptions">0</b>Attendance Exceptions</div><div class="stat"><b id="statAssets">0</b>Assets Issued</div><div class="stat"><b id="statVehicles">0</b>Vehicle Assignments</div><div class="stat"><b id="statPendingClaims">0</b>Pending Claims</div><div class="stat"><b id="statClaimTotal">RM 0.00</b>Claims This Month</div><div class="stat"><b id="statActivities">0</b>Staff Activities</div><div class="stat"><b id="statCompanyExpenseMonth">RM 0.00</b>Company Expenses This Month</div><div class="stat"><b id="statCompanyExpenseRecords">0</b>Company Expense Records</div></div>
-<div id="dashboardBackupStatus" class="backup-status warn" style="margin-top:14px">Backup status is being checked…</div>
-<p class="note">Your work is saved automatically in this browser. Export a JSON backup regularly so the records can be restored on another device or after browser data is cleared.</p>
-<button class="btn yellow" onclick="openBackupManager()">Open Backup Manager</button><button id="installAppBtn" class="btn green hidden" onclick="installPWA()">Install App</button><div id="iosInstallHelp" class="install-card hidden"><b>Install on iPhone / iPad</b>Open this site in Safari, tap <b>Share</b>, then choose <b>Add to Home Screen</b>.</div><input type="file" id="importFile" class="hidden" accept="application/json,.json" onchange="importBackup(event)">
-</div></div></section>
-
-<section id="employees" class="page hidden">
-<div class="card"><h2>Employee Master</h2><div class="card-body">
-<div class="grid3">
-<div><label>Employee Name</label><input id="empName"></div><div><label>Employee ID</label><input id="empId" readonly></div><div><label>Status</label><select id="empStatus"><option>Active</option><option>Resigned</option></select></div>
-<div><label>IC No.</label><input id="empIc"></div><div><label>Position</label><input id="empPosition"></div><div><label>Department</label><input id="empDepartment"></div>
-<div><label>Bank / Account No.</label><input id="empBank"></div><div><label>EPF / KWSP No.</label><input id="empEpf"></div><div><label>SOCSO / PERKESO No.</label><input id="empSocso"></div><div><label>Income Tax / LHDN No.</label><input id="empTax"></div><div><label>Basic Salary</label><input id="empSalary" type="number" value="2000"></div><div><label>Fixed Allowance</label><input id="empAllowance" type="number" value="0"></div><div><label>Annual Leave Entitlement</label><input id="empAnnualEntitlement" type="number" value="8"></div><div><label>Sick Leave Entitlement</label><input id="empSickEntitlement" type="number" value="14"></div>
-</div><button class="btn yellow" onclick="newEmployee()">New Employee</button><button class="btn green" onclick="saveEmployee()">Save Employee</button><button class="btn red" onclick="deleteEmployee()">Delete Selected</button>
-</div></div>
-<div class="card"><h2>Employee Document Vault</h2><div class="card-body">
-<p class="note">Select an employee above, then attach documents. Documents are saved in this browser storage; export backup regularly.</p>
-<div class="grid3">
-<div><label>Document Type</label><select id="docType"><option>IC Copy</option><option>EPF Document</option><option>PERKESO / SOCSO Document</option><option>Bank Account Proof</option><option>Driving Licence</option><option>Employment Contract</option><option>Offer Letter</option><option>Warning Letter</option><option>Resignation Letter</option><option>Others</option></select></div>
-<div><label>Document File</label><input id="docFile" type="file"></div>
-<div><label>Remarks</label><input id="docRemarks"></div>
-</div>
-<button class="btn green" onclick="addEmployeeDocument()">Add Document</button>
-<table class="table" id="documentTable" style="margin-top:12px"></table>
-</div></div>
-<div class="card"><h2>Employee List</h2><div class="card-body"><table class="table" id="employeeTable"></table></div></div></section>
-
-
-<section id="contract" class="page hidden">
-<div class="card no-print"><h2>Simple Employment Contract</h2><div class="card-body">
-<div class="grid3">
-<div><label>Select Employee</label><select id="contractEmployee"></select></div>
-<div><label>Employment Start Date</label><input id="contractStartDate" type="date"></div>
-<div><label>Contract Type</label><select id="contractType"><option>Permanent</option><option>Probation</option><option>Part-Time</option><option>Fixed Term</option></select></div>
-<div><label>Probation Period</label><input id="contractProbation" value="3 months"></div>
-<div><label>Working Hours</label><input id="contractWorkingHours" value="Monday to Friday, 8:00 AM – 5:00 PM; Saturday, 8:00 AM – 1:00 PM"></div>
-<div><label>Rest Day</label><input id="contractRestDay" value="Sunday"></div>
-<div><label>Annual Leave</label><input id="contractAnnualLeave" value="8 days per year"></div>
-<div><label>Notice Period</label><input id="contractNotice" value="1 month"></div>
-<div><label>Work Location</label><input id="contractLocation" value="GME Marketing office / assigned work location"></div>
-</div>
-<label>Additional Terms / Remarks</label>
-<textarea id="contractRemarks">Employee shall follow company policies, safety requirements, confidentiality obligations, and any reasonable work instructions issued by the Company.</textarea>
-<button class="btn yellow" onclick="generateContract(false)">Generate Filled Contract</button>
-<button class="btn secondary" onclick="generateContract(true)">Generate Blank Contract</button>
-<button class="btn" onclick="printOnly('contract')">Print / Save PDF</button>
-</div></div>
-<div id="contractPrint" class="print-area"></div>
-</section>
-
-<section id="payroll" class="page hidden">
-<div class="card no-print"><h2>Payroll & Payslip</h2><div class="card-body">
-<div class="grid3">
-<div><label>Select Employee</label><select id="payEmployee" onchange="loadPayrollEmployee()"></select></div><div><label>Payroll Month</label><input id="payMonth" type="month" onchange="loadPayrollClaims();loadPayrollAdvance();generatePayslip()"></div><div><label>Payment Date</label><input id="payDate" type="date" onchange="generatePayslip()"></div>
-<div><label>Basic Salary</label><input id="paySalary" type="number" oninput="generatePayslip()"></div><div><label>Fixed Allowance</label><input id="payAllowance" type="number" oninput="generatePayslip()"></div><div><label>Outstation Allowance</label><input id="payOutstationAllowance" type="number" value="0" oninput="generatePayslip()"></div><div><label>Commission / OT</label><input id="payCommission" type="number" value="0" oninput="generatePayslip()"></div>
-<div><label>Bonus / Adjustment</label><input id="payBonus" type="number" value="0" oninput="generatePayslip()"></div><div><label>Salary Advance Deduction</label><input id="payAdvanceDeduction" type="number" value="0" oninput="generatePayslip()"></div><div><label>Other Deduction</label><input id="payOtherDeduction" type="number" value="0" oninput="generatePayslip()"></div>
-<div><label>Approved Claims Reimbursement (Same Month)</label><input id="payClaimsReimbursement" type="number" value="0" readonly></div><div style="grid-column:span 2"><label>Claims Included</label><input id="payClaimsList" readonly placeholder="Approved claims for selected employee and payroll month"></div>
-</div><p class="note">Approved claims from the same expense month are added to the employee's total payment as reimbursement. They are shown separately and are not included in statutory salary calculations.</p><div class="payroll-basis"><b>Statutory contribution basis:</b> Basic Salary + Fixed Allowance + Commission / OT + Bonus / Adjustment. Outstation allowance and approved claim reimbursements are excluded. The displayed statutory amounts are estimates generated by this offline tool; verify against the latest official contribution schedules before submission.</div><button class="btn secondary" onclick="loadPayrollClaims()">Refresh Approved Claims</button><button class="btn yellow" onclick="generatePayslip()">Generate Payslip</button><button class="btn green" onclick="markPayrollClaimsPaid()">Mark Included Claims Paid</button><button class="btn" onclick="printOnly('payroll')">Print / Save PDF</button>
-</div></div><div id="payslipPrint" class="print-area"></div></section>
-
-<section id="advance" class="page hidden">
-<div class="card no-print"><h2>Salary Advance</h2><div class="card-body">
-<div class="grid3">
-<div><label>Select Employee</label><select id="advEmployee"></select></div><div><label>Request Date</label><input id="advRequestDate" type="date" onchange="checkAdvanceRule()"></div><div><label>Payment Date</label><input id="advPaymentDate" type="date" onchange="checkAdvanceRule()"></div>
-<div><label>Requested Amount</label><input id="advAmount" type="number"></div><div><label>Deduct From Month</label><input id="advDeductMonth" type="month"></div><div><label>Monthly Deduction</label><input id="advMonthlyDeduction" type="number"></div>
-<div><label>Case Type</label><input id="advCaseType" readonly></div><div><label>Approval Status</label><select id="advStatus"><option>Pending Approval</option><option>Approved</option><option>Rejected</option></select></div><div><label>Approved By</label><input id="advApprovedBy"></div>
-</div><label>Reason / Details</label><textarea id="advReason"></textarea>
-<div class="card" style="box-shadow:none;margin-top:12px"><h2 style="font-size:15px">Supporting Attachments</h2><div class="card-body">
-<div class="grid2"><div><label>Upload Files / Invoices / Approval Images</label><input id="advAttachments" type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" onchange="previewAdvanceFiles()"></div><div><label>Selected New Files</label><input id="advSelectedFiles" readonly placeholder="No new files selected"></div></div>
-<p class="note">You may upload multiple supporting files. For reliable browser storage, each file should be 2 MB or below. Attachments are included in the JSON backup.</p>
-<div style="overflow:auto"><table class="table" id="advanceAttachmentTable"></table></div>
-</div></div>
-<button class="btn yellow" onclick="newAdvance()">New Record</button><button class="btn green" onclick="saveAdvance()">Save Record</button><button class="btn red" onclick="deleteAdvance()">Delete Selected</button><button class="btn yellow" onclick="generateAdvanceForm(false)">Generate Filled Form</button><button class="btn secondary" onclick="generateAdvanceForm(true)">Generate Blank Form</button><button class="btn" onclick="printOnly('advance')">Print / Save PDF</button>
-</div></div>
-<div class="card no-print"><h2>Salary Advance Records</h2><div class="card-body">
-<div class="grid3"><div><label>Search Employee / Details</label><input id="advanceSearch" placeholder="Name, employee ID, reason or approver" oninput="refreshAdvanceRegister()"></div><div><label>Deduction Month</label><input id="advanceFilterMonth" type="month" onchange="refreshAdvanceRegister()"></div><div><label>Status</label><select id="advanceFilterStatus" onchange="refreshAdvanceRegister()"><option value="">All Statuses</option><option>Pending Approval</option><option>Approved</option><option>Rejected</option><option>Fully Deducted</option></select></div></div>
-<p class="note">Approved records automatically appear in Payroll when the employee and “Deduct From Month” match. Select Edit to revise a saved record.</p>
-<div style="overflow:auto"><table class="table" id="advanceRegisterTable"></table></div>
-</div></div><div id="advancePrint" class="print-area"></div></section>
-
-
-<section id="outstation" class="page hidden">
-<div class="card no-print"><h2>Outstation Allowance</h2><div class="card-body">
-<p class="note">Default allowance: RM70 per outstation day. You may override with manual amount if needed.</p>
-<div class="grid3">
-<div><label>Select Employee</label><select id="outEmployee"></select></div>
-<div><label>Outstation Start Date</label><input id="outStart" type="date" onchange="calcOutstation()"></div>
-<div><label>Outstation End Date</label><input id="outEnd" type="date" onchange="calcOutstation()"></div>
-<div><label>No. of Days</label><input id="outDays" type="number" value="1" oninput="calcOutstation()"></div>
-<div><label>Default Rate / Day (RM)</label><input id="outRate" type="number" value="70" oninput="calcOutstation()"></div>
-<div><label>Manual Amount (Optional)</label><input id="outManualAmount" type="number" placeholder="Leave blank to auto calculate" oninput="calcOutstation()"></div>
-<div><label>Total Allowance (RM)</label><input id="outTotal" type="number" readonly></div>
-<div><label>Customer / Location</label><input id="outLocation" placeholder="e.g. Tawau / Sandakan / customer name"></div>
-<div><label>Status</label><select id="outStatus"><option>Pending Approval</option><option>Approved</option><option>Rejected</option><option>Paid</option></select></div>
-</div>
-<label>Purpose / Remarks</label><textarea id="outPurpose" placeholder="Purpose of outstation, meeting, delivery, support work, etc."></textarea>
-<div class="card" style="box-shadow:none;margin-top:12px"><h2 style="font-size:15px">Supporting Documents / Approval Images</h2><div class="card-body">
-<input id="outAttachments" type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" capture="environment">
-<p class="note">Upload travel approvals, customer instructions, receipts, screenshots or related documents. Maximum 2 MB per file.</p>
-<div style="overflow:auto"><table class="table" id="outAttachmentTable"></table></div></div></div>
-<button class="btn yellow" onclick="newOutstationRecord()">New Record</button>
-<button class="btn green" onclick="saveOutstation()">Save Outstation Record</button>
-<button class="btn yellow" onclick="generateOutstationForm(false)">Generate Filled Form</button>
-<button class="btn secondary" onclick="generateOutstationForm(true)">Generate Blank Form</button>
-<button class="btn" onclick="printOnly('outstation')">Print / Save PDF</button>
-</div></div>
-<div class="card no-print"><h2>Outstation Records</h2><div class="card-body"><div class="grid3"><div><label>Search</label><input id="outSearch" oninput="refreshOutstationRegister()" placeholder="Employee, location, purpose or file name"></div><div><label>Status</label><select id="outFilterStatus" onchange="refreshOutstationRegister()"><option value="">All Statuses</option><option>Pending Approval</option><option>Approved</option><option>Rejected</option><option>Paid</option></select></div></div><div style="overflow:auto"><table class="table" id="outRegisterTable"></table></div></div></div>
-<div id="outstationPrint" class="print-area"></div>
-</section>
-
-<section id="leave" class="page hidden">
-<div class="card no-print"><h2>Leave Application</h2><div class="card-body">
-<div class="grid3">
-<div><label>Select Employee</label><select id="leaveEmployee"></select></div><div><label>Application Date</label><input id="leaveApplyDate" type="date"></div><div><label>Start Date</label><input id="leaveStart" type="date" onchange="calcLeaveDays()"></div>
-<div><label>End Date</label><input id="leaveEnd" type="date" onchange="calcLeaveDays()"></div><div><label>No. of Days</label><input id="leaveDays" type="number"></div><div><label>Annual Leave Balance</label><input id="leaveBalance" type="number" value="8"></div>
-<div><label>Approval Status</label><select id="leaveStatus"><option>Pending Approval</option><option>Approved</option><option>Rejected</option></select></div><div><label>Approved By</label><input id="leaveApprovedBy"></div>
-</div>
-<label>Leave Type</label><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px"><label><input type="radio" name="leaveType" value="Annual Leave" checked> Annual Leave</label><label><input type="radio" name="leaveType" value="Sick Leave"> Sick Leave</label><label><input type="radio" name="leaveType" value="Emergency Leave"> Emergency Leave</label><label><input type="radio" name="leaveType" value="Unpaid Leave"> Unpaid Leave</label><label><input type="radio" name="leaveType" value="Compassionate Leave"> Compassionate Leave</label><label><input type="radio" name="leaveType" value="Others"> Others</label></div>
-<label>Reason</label><textarea id="leaveReason"></textarea>
-<div class="card" style="box-shadow:none;margin-top:12px"><h2 style="font-size:15px">Supporting Documents / Approval Images</h2><div class="card-body">
-<input id="leaveAttachments" type="file" multiple accept="image/*,.pdf,.doc,.docx" capture="environment">
-<p class="note">Upload MC, leave approval screenshots, letters or other supporting documents. Maximum 2 MB per file.</p>
-<div style="overflow:auto"><table class="table" id="leaveAttachmentTable"></table></div></div></div>
-<button class="btn yellow" onclick="newLeaveRecord()">New Record</button>
-<button class="btn green" onclick="saveLeave()">Save Record</button><button class="btn yellow" onclick="generateLeaveForm(false)">Generate Filled Form</button><button class="btn secondary" onclick="generateLeaveForm(true)">Generate Blank Form</button><button class="btn" onclick="printOnly('leave')">Print / Save PDF</button>
-</div></div><div class="card no-print"><h2>Leave Records</h2><div class="card-body"><div class="grid3"><div><label>Search</label><input id="leaveSearch" oninput="refreshLeaveRegister()" placeholder="Employee, leave type, reason or file name"></div><div><label>Status</label><select id="leaveFilterStatus" onchange="refreshLeaveRegister()"><option value="">All Statuses</option><option>Pending Approval</option><option>Approved</option><option>Rejected</option></select></div></div><div style="overflow:auto"><table class="table" id="leaveRegisterTable"></table></div></div></div><div id="leavePrint" class="print-area"></div></section>
-
-
-<section id="exception" class="page hidden">
-<div class="card no-print"><h2>Attendance Exception Record</h2><div class="card-body">
-<p class="note">Record only exceptions such as absent, late, half-day, early leave or no-show. No need to record daily attendance.</p>
-<div class="grid3">
-<div><label>Select Employee</label><select id="exEmployee"></select></div>
-<div><label>Date</label><input id="exDate" type="date"></div>
-<div><label>Exception Type</label><select id="exType"><option>Absent</option><option>Late</option><option>Half Day</option><option>Early Leave</option><option>No Show</option><option>Medical Leave / MC</option><option>Unpaid Leave</option><option>Work From Home</option><option>Others</option></select></div>
-<div><label>Salary Impact</label><select id="exImpact"><option>No Deduction</option><option>Half-day Deduction</option><option>Full-day Deduction</option><option>Manual Deduction</option></select></div>
-<div><label>Deduction Amount (RM)</label><input id="exDeduction" type="number" value="0"></div>
-<div><label>Status</label><select id="exStatus"><option>Pending Approval</option><option>Approved</option><option>Rejected</option></select></div>
-<div><label>Approved By</label><input id="exApprovedBy"></div>
-</div>
-<label>Reason / Remarks</label><textarea id="exReason"></textarea>
-<div class="card" style="box-shadow:none;margin-top:12px"><h2 style="font-size:15px">Supporting Documents / Approval Images</h2><div class="card-body">
-<input id="exAttachments" type="file" multiple accept="image/*,.pdf,.doc,.docx" capture="environment">
-<p class="note">Upload MC, attendance screenshots, approval messages, warning letters or related documents. Maximum 2 MB per file.</p>
-<div style="overflow:auto"><table class="table" id="exAttachmentTable"></table></div></div></div>
-<button class="btn yellow" onclick="newExceptionRecord()">New Record</button>
-<button class="btn green" onclick="saveException()">Save Exception</button>
-<button class="btn yellow" onclick="generateExceptionForm(false)">Generate Filled Form</button>
-<button class="btn secondary" onclick="generateExceptionForm(true)">Generate Blank Form</button>
-<button class="btn" onclick="printOnly('exception')">Print / Save PDF</button>
-</div></div><div class="card no-print"><h2>Attendance Exception Records</h2><div class="card-body"><div class="grid3"><div><label>Search</label><input id="exSearch" oninput="refreshExceptionRegister()" placeholder="Employee, type, reason or file name"></div><div><label>Status</label><select id="exFilterStatus" onchange="refreshExceptionRegister()"><option value="">All Statuses</option><option>Pending Approval</option><option>Approved</option><option>Rejected</option></select></div></div><div style="overflow:auto"><table class="table" id="exRegisterTable"></table></div></div></div><div id="exceptionPrint" class="print-area"></div></section>
-
-<section id="assets" class="page hidden">
-<div class="card no-print"><h2>Asset & Equipment Issue</h2><div class="card-body">
-<div class="grid3">
-<div><label>Select Employee</label><select id="assetEmployee"></select></div>
-<div><label>Issue Date</label><input id="assetIssueDate" type="date"></div>
-<div><label>Asset Type</label><select id="assetType"><option>Company Uniform</option><option>Safety Vest</option><option>Safety Shoes</option><option>Company Phone</option><option>Company SIM</option><option>Laptop</option><option>Vehicle Key</option><option>Fuel Card</option><option>Touch 'n Go Card</option><option>Warehouse Key</option><option>Office Key</option><option>Tools</option><option>Others</option></select></div>
-<div><label>Asset Description</label><input id="assetDesc"></div>
-<div><label>Serial / Card / Plate No.</label><input id="assetSerial"></div>
-<div><label>Condition</label><select id="assetCondition"><option>New</option><option>Good</option><option>Used</option><option>Damaged</option></select></div>
-<div><label>Status</label><select id="assetStatus"><option>Issued</option><option>Returned</option><option>Lost</option><option>Damaged</option></select></div>
-<div><label>Return Date</label><input id="assetReturnDate" type="date"></div>
-</div>
-<label>Remarks</label><textarea id="assetRemarks"></textarea>
-<button class="btn green" onclick="saveAsset()">Save Asset Record</button>
-<button class="btn yellow" onclick="generateAssetForm(false)">Generate Filled Form</button>
-<button class="btn secondary" onclick="generateAssetForm(true)">Generate Blank Form</button>
-<button class="btn" onclick="printOnly('assets')">Print / Save PDF</button>
-</div></div><div id="assetPrint" class="print-area"></div></section>
-
-<section id="vehicles" class="page hidden">
-<div class="card no-print"><h2>Vehicle Assignment</h2><div class="card-body">
-<div class="grid3">
-<div><label>Select Driver / Employee</label><select id="vehEmployee"></select></div>
-<div><label>Assignment Date</label><input id="vehDate" type="date"></div>
-<div><label>Vehicle Plate No.</label><input id="vehPlate"></div>
-<div><label>Vehicle Type</label><input id="vehType" placeholder="e.g. Lorry / Van / Pickup"></div>
-<div><label>Fuel Card No.</label><input id="vehFuelCard"></div>
-<div><label>Touch 'n Go Card No.</label><input id="vehTng"></div>
-<div><label>Start Mileage</label><input id="vehMileage" type="number" value="0"></div>
-<div><label>Status</label><select id="vehStatus"><option>Assigned</option><option>Returned</option><option>Temporary</option></select></div>
-</div>
-<label>Remarks</label><textarea id="vehRemarks"></textarea>
-<button class="btn green" onclick="saveVehicle()">Save Vehicle Assignment</button>
-<button class="btn yellow" onclick="generateVehicleForm(false)">Generate Filled Form</button>
-<button class="btn secondary" onclick="generateVehicleForm(true)">Generate Blank Form</button>
-<button class="btn" onclick="printOnly('vehicles')">Print / Save PDF</button>
-</div></div><div id="vehiclePrint" class="print-area"></div></section>
-
-
-<section id="expenses" class="page hidden">
-<div class="card no-print"><h2>Expense Management</h2><div class="card-body">
-<p class="note">Use this module for staff pay-and-claim, entertainment, staff welfare/engagement, travel, purchases and other company expenses. Approved claims may be reimbursed together with the employee's salary for the same month, while remaining separate from statutory wages and deductions.</p>
-<div class="grid3">
-<div><label>Claim No.</label><input id="claimNo" readonly></div>
-<div><label>Claimant / Employee</label><select id="claimEmployee"></select></div>
-<div><label>Claim Date</label><input id="claimDate" type="date"></div>
-<div><label>Expense Date</label><input id="expenseDate" type="date"></div>
-<div><label>Expense Type</label><select id="claimType" onchange="toggleClaimFields()"><option>Travel</option><option>Entertainment</option><option>Staff Welfare / Engagement</option><option>Office Purchase</option><option>Business Purchase</option><option>Marketing</option><option>Vehicle</option><option>Training</option><option>Utilities / Operations</option><option>Others</option></select></div>
-<div><label>Category / Item</label><input id="claimCategory" placeholder="e.g. Parking, team lunch, stationery"></div>
-<div><label>Customer / Supplier (Optional)</label><input id="claimCustomer"></div>
-<div><label>Project / Job (Optional)</label><input id="claimProject"></div>
-<div><label>Payment Made By</label><select id="claimPaidBy"><option>Cash</option><option>Personal Debit Card</option><option>Personal Credit Card</option><option>DuitNow / Bank Transfer</option><option>E-Wallet</option><option>Others</option></select></div>
-<div><label>Budget Amount (RM)</label><input id="claimBudget" type="number" value="0" oninput="calcClaimVariance()"></div>
-<div><label>Claimed / Actual Amount (RM)</label><input id="claimAmount" type="number" value="0" oninput="calcClaimVariance()"></div>
-<div><label>Variance (RM)</label><input id="claimVariance" type="number" readonly></div>
-<div><label>Budget Status</label><input id="claimBudgetStatus" readonly></div>
-<div><label>Claim Status</label><select id="claimStatus"><option>Draft</option><option>Submitted</option><option>Approved</option><option>Rejected</option><option>Paid</option><option>Closed</option></select></div>
-<div><label>Approved By</label><input id="claimApprovedBy"></div>
-<div><label>Payment Date</label><input id="claimPaymentDate" type="date"></div>
-<div><label>Reimbursement Method</label><select id="claimReimburseMethod"><option>Bank Transfer</option><option>Cash</option><option>DuitNow</option><option>Not Applicable</option></select></div>
-</div>
-<div id="staffActivityFields" class="card" style="box-shadow:none;margin-top:12px;display:none"><h2 style="font-size:15px">Staff Welfare / Engagement Details</h2><div class="card-body"><div class="grid3">
-<div><label>Activity Name</label><input id="activityName" placeholder="e.g. Team Lunch / Birthday Celebration"></div>
-<div><label>Activity Date</label><input id="activityDate" type="date"></div>
-<div><label>Venue</label><input id="activityVenue"></div>
-<div><label>Organizer</label><input id="activityOrganizer"></div>
-<div><label>No. of Participants</label><input id="activityParticipants" type="number" value="0"></div>
-<div><label>Participants / Staff Names</label><input id="activityNames" placeholder="Separate names with commas"></div>
-</div></div></div>
-<label>Description / Business Purpose</label><textarea id="claimDescription"></textarea>
-<div class="card" style="box-shadow:none;margin-top:12px"><h2 style="font-size:15px">Receipts / Supporting Documents / Approval Images</h2><div class="card-body">
-<input id="claimAttachments" type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" capture="environment">
-<input id="claimReceipt" class="hidden" type="file" accept="image/*,.pdf">
-<div><label>Attachment Remarks</label><input id="claimReceiptRemarks" placeholder="Optional note for the uploaded files"></div>
-<p class="note">Upload multiple receipts, invoices, approval screenshots or related documents. Maximum 2 MB per file.</p>
-<div style="overflow:auto"><table class="table" id="claimAttachmentTable"></table></div></div></div>
-<button class="btn yellow" onclick="newClaim()">New Claim</button>
-<button class="btn green" onclick="saveClaim()">Save Claim</button>
-<button class="btn yellow" onclick="generateClaimForm(false)">Generate Filled Form</button>
-<button class="btn secondary" onclick="generateClaimForm(true)">Generate Blank Form</button>
-<button class="btn" onclick="printOnly('expenses')">Print / Save PDF</button>
-</div></div>
-<div class="card"><h2>Claims & Reimbursement Register</h2><div class="card-body"><table class="table" id="claimRegisterTable"></table></div></div>
-<div id="claimPrint" class="print-area"></div>
-</section>
-
-
-<section id="companyexpenses" class="page hidden">
-<div class="card"><h2>Company Account Expenses</h2><div class="card-body">
-<p class="note">Record payments made directly using the company bank account, company debit card, DuitNow, cheque or company cash. These records are separate from staff claims and payroll reimbursements.</p>
-<div class="grid3">
-<div><label>Expense Record No.</label><input id="coExpNo" readonly></div>
-<div><label>Payment Date</label><input id="coExpDate" type="date"></div>
-<div><label>Accounting Month</label><input id="coExpMonth" type="month"></div>
-<div><label>Supplier / Payee</label><input id="coExpSupplier" placeholder="Company or person paid"></div>
-<div><label>Expense Category</label><select id="coExpCategory"><option>Battery / Stock Purchase</option><option>Vehicle & Fuel</option><option>Shop Rental</option><option>Utilities</option><option>Telephone / Internet</option><option>Salary / Payroll Payment</option><option>EPF / SOCSO / EIS</option><option>Tax / Government Fee</option><option>Office Supplies</option><option>Equipment / Tools</option><option>Repairs & Maintenance</option><option>Marketing / Advertising</option><option>Insurance</option><option>Professional Fee</option><option>Bank Charges</option><option>Delivery / Courier</option><option>Staff Welfare</option><option>Other Company Expense</option></select></div>
-<div><label>Amount Paid (RM)</label><input id="coExpAmount" type="number" min="0" step="0.01" value="0"></div>
-<div><label>Paid From</label><select id="coExpAccount"><option>Company Bank Account</option><option>Company Debit Card</option><option>Company Credit Card</option><option>Company Cash</option><option>Cheque</option><option>DuitNow / Bank Transfer</option><option>Other Company Account</option></select></div>
-<div><label>Bank / Account Name</label><input id="coExpBank" placeholder="e.g. Public Bank Current Account"></div>
-<div><label>Payment Reference</label><input id="coExpReference" placeholder="Transaction ID / cheque no. / invoice no."></div>
-<div><label>Invoice / Receipt No.</label><input id="coExpInvoice"></div>
-<div><label>Payment Status</label><select id="coExpStatus"><option>Paid</option><option>Pending</option><option>Partially Paid</option><option>Cancelled</option></select></div>
-<div><label>Tax Treatment</label><select id="coExpTax"><option>Normal Business Expense</option><option>Capital / Asset Purchase</option><option>Non-Deductible / Personal</option><option>To Be Confirmed</option></select></div>
-</div>
-<label>Description / Purpose</label><textarea id="coExpDescription" placeholder="What was purchased or why this payment was made"></textarea>
-<div class="grid2">
-<div><label>Upload Invoices / Receipts / Pictures</label><input id="coExpFiles" type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" capture="environment"><p class="note">You may select several files. On iPhone, this can also open the camera. Keep each file reasonably small because files are stored in this browser and included in JSON backups.</p></div>
-<div><label>Attachment Remarks</label><input id="coExpFileRemarks" placeholder="Optional notes for uploaded documents"><div id="coExpExistingFiles" class="attachment-list" style="margin-top:8px"></div></div>
-</div>
-<button class="btn yellow" onclick="newCompanyExpense()">New Record</button>
-<button class="btn green" onclick="saveCompanyExpense()">Save Company Expense</button>
-<button class="btn red" onclick="deleteCompanyExpense()">Delete Selected</button>
-</div></div>
-<div class="card"><h2>Monthly Company Expense Tracking</h2><div class="card-body">
-<div class="filter-bar">
-<div><label>Month</label><input id="coExpFilterMonth" type="month" onchange="refreshCompanyExpenseRegister()"></div>
-<div><label>Category</label><select id="coExpFilterCategory" onchange="refreshCompanyExpenseRegister()"><option value="">All Categories</option></select></div>
-<div><label>Search</label><input id="coExpSearch" placeholder="Supplier, reference or description" oninput="refreshCompanyExpenseRegister()"></div>
-<button class="btn secondary" onclick="exportCompanyExpensesCSV()">Export CSV</button>
-</div>
-<div class="ledger-summary"><div class="stat"><b id="coExpMonthTotal">RM 0.00</b>Selected Month Total</div><div class="stat"><b id="coExpPaidTotal">RM 0.00</b>Paid Total</div><div class="stat"><b id="coExpPendingTotal">RM 0.00</b>Pending / Partial</div><div class="stat"><b id="coExpRecordCount">0</b>Records</div></div>
-<table class="table" id="companyExpenseTable"></table>
-</div></div>
-</section>
-
-<section id="blankforms" class="page hidden"><div class="card"><h2>Blank Forms</h2><div class="card-body">
-<button class="btn yellow" onclick="showPage('advance');generateAdvanceForm(true);printOnly('advance')">Print Blank Salary Advance Form</button>
-<button class="btn yellow" onclick="showPage('leave');generateLeaveForm(true);printOnly('leave')">Print Blank Leave Form</button>
-<button class="btn yellow" onclick="showPage('outstation');generateOutstationForm(true);printOnly('outstation')">Print Blank Outstation Form</button>
-<button class="btn yellow" onclick="showPage('exception');generateExceptionForm(true);printOnly('exception')">Print Blank Attendance Exception Form</button>
-<button class="btn yellow" onclick="showPage('assets');generateAssetForm(true);printOnly('assets')">Print Blank Asset Issue Form</button>
-<button class="btn yellow" onclick="showPage('vehicles');generateVehicleForm(true);printOnly('vehicles')">Print Blank Vehicle Assignment Form</button>
-<button class="btn yellow" onclick="showPage('expenses');generateClaimForm(true);printOnly('expenses')">Print Blank Expense Claim Form</button>
-<button class="btn secondary" onclick="showPage('payroll');generatePayslip(true);printOnly('payroll')">Print Blank Payslip</button>
-</div></div></section>
-
-<section id="reports" class="page hidden"><div class="card"><h2>Reports</h2><div class="card-body"><h3>Salary Advance Records</h3><table class="table" id="advanceTable"></table><h3>Leave Records</h3><table class="table" id="leaveTable"></table><h3>Outstation Allowance Records</h3><table class="table" id="outstationTable"></table><h3>Attendance Exception Records</h3><table class="table" id="exceptionTable"></table><h3>Asset Records</h3><table class="table" id="assetTable"></table><h3>Vehicle Assignment Records</h3><table class="table" id="vehicleTable"></table><h3>Expense & Claim Records</h3><table class="table" id="expenseTable"></table><h3>Company Account Expense Records</h3><table class="table" id="companyExpenseReportTable"></table></div></div></section>
-<section id="settings" class="page hidden"><div class="card"><h2>Company Settings</h2><div class="card-body"><div class="grid2"><div><label>Company Name</label><input id="setCompanyName"></div><div><label>Company Registration No.</label><input id="setCompanyNo"></div><div><label>Telephone</label><input id="setTel"></div><div><label>Email</label><input id="setEmail"></div><div style="grid-column:1/-1"><label>Address</label><textarea id="setAddress"></textarea></div>
-<div><label>Working Hours (Mon–Fri)</label><input id="setWeekdayHours" value="Monday to Friday, 8:00 AM – 5:00 PM"></div>
-<div><label>Working Hours (Saturday)</label><input id="setSaturdayHours" value="Saturday, 8:00 AM – 1:00 PM"></div>
-<div><label>Rest Day</label><input id="setRestDay" value="Sunday"></div>
-<div><label>Public Holiday Policy</label><input id="setPublicHoliday" value="Malaysia gazetted public holidays applicable in Sabah"></div>
-<div><label>Default Probation Period</label><input id="setProbation" value="3 months"></div>
-<div><label>Default Notice Period</label><input id="setNotice" value="1 month"></div>
-<div><label>Salary Payment Day</label><input id="setSalaryPayment" value="On or before the 7th day of the following month"></div><div><label>Outstation Allowance Rate</label><input id="setOutstationRate" type="number" value="70"></div><div><label>Employer EPF No.</label><input id="setEmployerEpf"></div><div><label>Employer PERKESO No.</label><input id="setEmployerSocso"></div><div><label>Employer LHDN No.</label><input id="setEmployerTax"></div></div><button class="btn green" onclick="saveSettings()">Save Settings</button></div></div></section>
-</main></div>
-
-
-
-<nav class="mobile-bottom-nav no-print" aria-label="Mobile navigation">
-<button class="active" data-page="dashboard" onclick="mobileGo('dashboard',this)"><span>⌂</span>Home</button>
-<button data-page="employees" onclick="mobileGo('employees',this)"><span>♙</span>Staff</button>
-<button data-page="payroll" onclick="mobileGo('payroll',this)"><span>RM</span>Payroll</button>
-<button data-page="expenses" onclick="mobileGo('expenses',this)"><span>▧</span>Claims</button>
-<button data-page="more" onclick="toggleMobileMenu()"><span>☰</span>More</button>
-</nav>
-
-<div id="backupManagerModal" class="backup-modal no-print" role="dialog" aria-modal="true" aria-labelledby="backupManagerTitle">
-  <div class="backup-dialog">
-    <h3 id="backupManagerTitle">GME HRMS Backup Manager</h3>
-    <div class="content">
-      <div id="backupManagerStatus" class="backup-status warn">Checking backup status…</div>
-      <div class="backup-grid">
-        <div class="backup-info"><small>Automatic Save</small><b id="bmAutoSave">Active</b></div>
-        <div class="backup-info"><small>Unsaved Changes Since Backup</small><b id="bmDirty">No</b></div>
-        <div class="backup-info"><small>Last JSON Backup</small><b id="bmLastBackup">Never</b></div>
-        <div class="backup-info"><small>Database Size</small><b id="bmDbSize">0 KB</b></div>
-        <div class="backup-info"><small>System Version</small><b id="bmVersion">v4.0</b></div>
-        <div class="backup-info"><small>Storage Location</small><b>Current browser only</b></div>
-      </div>
-      <h4 style="margin:15px 0 6px">Recent Backup History</h4>
-      <table class="backup-history" id="backupHistoryTable"></table>
-      <p class="note" style="margin-bottom:0">“Backup Now” downloads a JSON file containing your company settings, employees, forms and records. Keep the file in a safe folder or cloud drive.</p>
+<main class="app">
+  <div class="topbar">
+    <div class="brand">
+      <h1>CY Smart Worksheet</h1>
+      <span class="badge">GitHub Pages / PWA</span>
     </div>
     <div class="actions">
-      <button class="btn yellow" onclick="backupNowFromManager()">Backup Now</button>
-      <button class="btn secondary" onclick="document.getElementById('importFile').click()">Restore JSON</button>
-      <button class="btn red" onclick="safeExitFromManager()">Exit System</button>
-      <button class="btn secondary" onclick="closeBackupManager()">Continue Working</button>
+      <select id="themeSelect" style="width:auto">
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+        <option value="gme">CY Orange</option>
+      </select>
+      <button id="installBtn" class="secondary hidden">Install App</button>
     </div>
   </div>
-</div>
+
+  <section id="dashboardView">
+    <div class="panel">
+      <div class="dashboard-head">
+        <div>
+          <h2 style="margin:0">My Worksheets</h2>
+          <div class="status">Worksheets and attachments are stored in this browser using IndexedDB.</div>
+        </div>
+        <button id="newWorksheetBtn" class="primary">+ New Worksheet</button>
+      </div>
+      <div class="searchbar">
+        <input id="searchWorksheets" type="search" placeholder="Search title, company, remarks or cells...">
+        <select id="sortWorksheets">
+          <option value="modified">Last Modified</option>
+          <option value="title">Title A–Z</option>
+          <option value="company">Company A–Z</option>
+          <option value="date">Document Date</option>
+        </select>
+      </div>
+      <div id="worksheetCards" class="cards"></div>
+    </div>
+  </section>
+
+  <section id="editorView" class="hidden">
+    <div class="panel">
+      <div class="actions editor-actions" style="margin-bottom:10px">
+        <button id="backBtn">← Worksheets</button>
+        <button id="saveBtn" class="primary">Save</button>
+        <button id="saveAsBtn">Save As Copy</button>
+        <button id="exportExcelBtn" class="success">Excel</button><button id="importExcelBtn">Import Excel</button><input id="importExcelFile" type="file" accept=".xlsx,.xls" hidden>
+        <button id="exportCsvBtn" class="success">CSV</button>
+        <button id="exportPdfBtn" class="success">PDF / Print</button>
+        <button id="exportJsonBtn" class="secondary">JSON Backup</button>
+        <button id="importJsonBtn">Import JSON</button>
+        <input id="importJsonFile" type="file" accept=".json,application/json" hidden>
+      </div>
+      <div id="saveNotice" class="notice">Saved successfully.</div>
+      <div class="meta-grid">
+        <div class="field"><label>Title</label><input id="docTitle" placeholder="Worksheet title"></div>
+        <div class="field"><label>Company</label><input id="company" placeholder="Company name"></div>
+        <div class="field"><label>Date</label><input id="docDate" type="date"></div>
+        <div class="field"><label>Status</label>
+          <select id="docStatus">
+            <option>Draft</option><option>In Progress</option><option>Completed</option><option>On Hold</option>
+          </select>
+        </div>
+        <div class="field"><label>Prepared By</label><input id="preparedBy" placeholder="Name"></div>
+        <div class="field"><label>Department</label><input id="department" placeholder="Department"></div>
+        <div class="field full"><label>Remarks</label><textarea id="remarks" rows="3" placeholder="Remarks"></textarea></div>
+      </div>
+      <div class="status" id="saveStatus" style="margin-top:8px">Not saved yet</div>
+    </div>
+
+    <section class="panel">
+      <div class="toolbar">
+        <div class="toolgroup">
+          <div class="field"><label>Rows</label><input id="rowsToAdd" class="small" type="number" min="1" max="500" value="1"></div>
+          <button id="addRowsBtn" class="primary">Add</button>
+          <button id="deleteRowBtn">Delete Last</button>
+        </div>
+        <div class="toolgroup">
+          <div class="field"><label>Columns</label><input id="colsToAdd" class="small" type="number" min="1" max="50" value="1"></div>
+          <button id="addColsBtn" class="primary">Add</button>
+          <button id="deleteColBtn">Delete Last</button>
+        </div>
+        <div class="toolgroup">
+          <div class="field"><label>Formula</label>
+            <select id="formulaType" class="small">
+              <option value="SUM">SUM</option>
+              <option value="AVERAGE">AVERAGE</option>
+              <option value="MIN">MIN</option>
+              <option value="MAX">MAX</option>
+              <option value="COUNT">COUNT</option>
+            </select>
+          </div>
+          <div class="field"><label>Column</label><select id="formulaColumn" class="small"></select></div>
+          <button id="toggleFormulaBtn">Add / Remove</button>
+        </div>
+      </div>
+      <div class="status" style="margin-top:8px">Click any header or cell to edit. Paste multi-cell data copied from Excel directly into the table.</div>
+    </section>
+
+    <section class="panel">
+      <div class="sheet-wrap">
+        <table>
+          <thead><tr id="headerRow"><th class="rowno">#</th></tr></thead>
+          <tbody id="sheetBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="dashboard-head">
+        <div>
+          <h3 style="margin:0">Attachments</h3>
+          <div class="status">Stored with this worksheet in your browser.</div>
+        </div>
+        <div class="attachment-upload">
+          <button id="uploadAttachmentBtn">Upload Attachment</button>
+          <input id="attachmentFile" type="file" multiple hidden>
+        </div>
+      </div>
+      <div id="attachmentList" class="attachment-list"></div>
+    </section>
+  </section>
+</main>
 
 <script>
-const defaultData={settings:{companyName:'GME MARKETING',companyNo:'0000200330T',tel:'019-871 9868',email:'gme.sbkk@gmail.com',address:'G-G-60, Lorong Inanam Kapital 5, Inanam Kapital,\\nJalan Nountun, Inanam, 88450 Kota Kinabalu, Sabah',weekdayHours:'Monday to Friday, 8:00 AM – 5:00 PM',saturdayHours:'Saturday, 8:00 AM – 1:00 PM',restDay:'Sunday',publicHoliday:'Malaysia gazetted public holidays applicable in Sabah',probation:'3 months',notice:'1 month',salaryPayment:'On or before the 7th day of the following month',outstationRate:70},employees:[{id:'EMP001',name:'Kwan Khar Lien',ic:'810302-12-5349',position:'General Manager',department:'',bank:'Hong Leong 28651215655',salary:2000,allowance:1000,epf:'',socso:'',tax:'',annualEntitlement:8,sickEntitlement:14,documents:[],status:'Active'},{id:'EMP002',name:'Sabri Bin Aris',ic:'920925-12-5123',position:'Store Supervisor',department:'',bank:'Public Bank 6822704228',salary:2000,allowance:0,epf:'',socso:'',tax:'',annualEntitlement:8,sickEntitlement:14,documents:[],status:'Active'},{id:'EMP003',name:'John Abed Amran @ Alfred',ic:'020308-12-0069',position:'Lorry Driver',department:'',bank:'',salary:2300,allowance:0,epf:'',socso:'',tax:'',annualEntitlement:8,sickEntitlement:14,documents:[],status:'Active'}],advances:[],leaves:[],outstations:[],exceptions:[],assets:[],vehicles:[],claims:[],companyExpenses:[]}
-let db=JSON.parse(localStorage.getItem('gmeHRMSv2')||'null')||defaultData, selectedEmpId='', selectedAdvanceId='';
-function migrateDB(){db.settings=db.settings||defaultData.settings; db.settings.weekdayHours='Monday to Friday, 8:00 AM – 5:00 PM'; db.settings.saturdayHours='Saturday, 8:00 AM – 1:00 PM'; db.settings.restDay='Sunday'; db.settings.publicHoliday='Malaysia gazetted public holidays applicable in Sabah'; db.employees=db.employees||[]; db.advances=db.advances||[]; db.advances.forEach((a,i)=>{a.id=a.id||('ADV'+String(i+1).padStart(4,'0'));a.requestDate=a.requestDate||a.date||'';a.paymentDate=a.paymentDate||'';a.deductMonth=a.deductMonth||'';a.monthlyDeduction=Number(a.monthlyDeduction||a.amount||0);a.reason=a.reason||'';a.approvedBy=a.approvedBy||'';}); db.leaves=db.leaves||[]; db.outstations=db.outstations||[]; db.exceptions=db.exceptions||[]; db.assets=db.assets||[]; db.vehicles=db.vehicles||[]; db.claims=db.claims||[]; try{const separateExpenses=JSON.parse(localStorage.getItem('gmeCompanyExpensesV1')||'null');db.companyExpenses=Array.isArray(separateExpenses)?separateExpenses:(db.companyExpenses||[])}catch(e){db.companyExpenses=db.companyExpenses||[]} db.version='4.2.1';}
-migrateDB();
-function saveDB(){localStorage.setItem('gmeHRMSv2',JSON.stringify(db));markBackupDirty();refreshAll()}function today(){return new Date().toISOString().slice(0,10)}function monthNow(){let d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}function money(v){return Number(v||0).toLocaleString('en-MY',{minimumFractionDigits:2,maximumFractionDigits:2})}function num(id){return Number(document.getElementById(id)?.value||0)}function emp(id){return db.employees.find(e=>e.id===id)||{}}
-function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');document.querySelectorAll('.mobile-bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));if(window.innerWidth<=800)window.scrollTo({top:0,behavior:'smooth'});} function mobileGo(id,btn){showPage(id);document.querySelectorAll('.mobile-bottom-nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
-function nextEmpId(){let max=0;db.employees.forEach(e=>{let m=e.id.match(/(\\d+)/);if(m)max=Math.max(max,+m[1])});return 'EMP'+String(max+1).padStart(3,'0')}
-function refreshAll(){refreshEmployees();refreshSelects();refreshReports();refreshAdvanceRegister();statEmployees.textContent=db.employees.filter(e=>e.status==='Active').length;statAdvances.textContent=db.advances.length;statLeaves.textContent=db.leaves.length;if(document.getElementById('statOutstations'))statOutstations.textContent=(db.outstations||[]).length; if(document.getElementById('statExceptions'))statExceptions.textContent=(db.exceptions||[]).length; if(document.getElementById('statAssets'))statAssets.textContent=(db.assets||[]).filter(a=>a.status==='Issued').length; if(document.getElementById('statVehicles'))statVehicles.textContent=(db.vehicles||[]).filter(v=>v.status==='Assigned').length; if(document.getElementById('statPendingClaims'))statPendingClaims.textContent=(db.claims||[]).filter(c=>['Submitted','Approved'].includes(c.status)).length; if(document.getElementById('statClaimTotal')){let m=monthNow();let total=(db.claims||[]).filter(c=>(c.expenseDate||'').startsWith(m)).reduce((a,c)=>a+Number(c.amount||0),0);statClaimTotal.textContent='RM '+money(total)} if(document.getElementById('statActivities'))statActivities.textContent=(db.claims||[]).filter(c=>c.type==='Staff Welfare / Engagement').length; if(document.getElementById('statCompanyExpenseMonth')){let m=monthNow();let t=(db.companyExpenses||[]).filter(x=>(x.month||x.date||'').startsWith(m)&&x.status!=='Cancelled').reduce((s,x)=>s+Number(x.amount||0),0);statCompanyExpenseMonth.textContent='RM '+money(t)} if(document.getElementById('statCompanyExpenseRecords'))statCompanyExpenseRecords.textContent=(db.companyExpenses||[]).length; refreshCompanyExpenseRegister()}
-function refreshEmployees(){employeeTable.innerHTML='<tr><th>ID</th><th>Name</th><th>Position</th><th>Salary</th><th>Status</th><th>Action</th></tr>'+db.employees.map(e=>`<tr><td>${e.id}</td><td>${e.name}</td><td>${e.position||''}</td><td>RM ${money(e.salary)}</td><td>${e.status}</td><td><button class="btn secondary" onclick="editEmployee('${e.id}')">Edit</button></td></tr>`).join('')}
-function refreshSelects(){['payEmployee','advEmployee','leaveEmployee','contractEmployee','outEmployee','exEmployee','assetEmployee','vehEmployee','claimEmployee'].forEach(id=>{let s=document.getElementById(id);if(!s)return;s.innerHTML='<option value="">-- Select Employee --</option>'+db.employees.filter(e=>e.status==='Active').map(e=>`<option value="${e.id}">${e.id} - ${e.name}</option>`).join('')})}
-function newEmployee(){selectedEmpId='';empName.value='';empId.value=nextEmpId();empIc.value='';empPosition.value='';empDepartment.value='';empBank.value='';empEpf.value='';empSocso.value='';empTax.value='';empSalary.value=2000;empAllowance.value=0;empAnnualEntitlement.value=8;empSickEntitlement.value=14;empStatus.value='Active';refreshDocuments()}
-function editEmployee(id){let e=emp(id);selectedEmpId=id;empName.value=e.name;empId.value=e.id;empIc.value=e.ic||'';empPosition.value=e.position||'';empDepartment.value=e.department||'';empBank.value=e.bank||'';empEpf.value=e.epf||'';empSocso.value=e.socso||'';empTax.value=e.tax||'';empSalary.value=e.salary||0;empAllowance.value=e.allowance||0;empAnnualEntitlement.value=e.annualEntitlement||8;empSickEntitlement.value=e.sickEntitlement||14;empStatus.value=e.status||'Active';refreshDocuments();showPage('employees')}
-function saveEmployee(){let e={id:empId.value||nextEmpId(),name:empName.value,ic:empIc.value,position:empPosition.value,department:empDepartment.value,bank:empBank.value,epf:empEpf.value,socso:empSocso.value,tax:empTax.value,salary:num('empSalary'),allowance:num('empAllowance'),annualEntitlement:num('empAnnualEntitlement'),sickEntitlement:num('empSickEntitlement'),documents:(emp(empId.value).documents||[]),status:empStatus.value};if(!e.name){alert('Enter employee name');return}let i=db.employees.findIndex(x=>x.id===e.id);i>=0?db.employees[i]=e:db.employees.push(e);saveDB();alert('Employee saved')}
-function deleteEmployee(){if(!empId.value)return;if(confirm('Delete employee?')){db.employees=db.employees.filter(e=>e.id!==empId.value);saveDB();newEmployee()}}
-function header(title){let s=db.settings;return `<div class="a4-header"><div class="a4-company"><h1>${s.companyName}</h1><p><b>Company Registration No.:</b> ${s.companyNo}</p><p>${s.address.replace(/\\n/g,'<br>')}</p><p><b>Tel:</b> ${s.tel} &nbsp; | &nbsp; <b>Email:</b> ${s.email}</p></div><div class="a4-title">${title}</div></div>`}
-function row(l,v=''){return `<div class="frow"><div class="flabel">${l}</div><div class="fval"><div class="line">${v||''}</div></div></div>`}function tr(l,v){return `<tr><td>${l}</td><td class="right">${money(v)}</td></tr>`}
-function socsoEmp(s){if(s<=2000)return 9.75;if(s<=2100)return 10.25;if(s<=2200)return 10.75;if(s<=2300)return 11.25;if(s<=2400)return 11.75;if(s<=2500)return 12.25;return Math.min(24.75,Math.ceil(s/100)*.5-.25)}function socsoEr(s){if(s<=2000)return 34.15;if(s<=2100)return 35.85;if(s<=2200)return 37.55;if(s<=2300)return 39.25;if(s<=2400)return 40.95;if(s<=2500)return 42.65;return Math.min(86.65,Math.ceil(s/100)*1.7+.15)}function eis(s){if(s<=2000)return 4;if(s<=2100)return 4.2;if(s<=2200)return 4.4;if(s<=2300)return 4.6;if(s<=2400)return 4.8;if(s<=2500)return 5;return Math.min(19.8,Math.round(s*.002*20)/20)}
-function payrollMonthClaims(){
- const employee=document.getElementById('payEmployee')?.value||'';
- const month=document.getElementById('payMonth')?.value||'';
- if(!employee||!month)return [];
- return (db.claims||[]).filter(c=>c.employee===employee && String(c.expenseDate||'').startsWith(month) && c.status==='Approved');
-}
-function loadPayrollClaims(){
- const claims=payrollMonthClaims();
- const total=claims.reduce((sum,c)=>sum+Number(c.amount||0),0);
- const amountEl=document.getElementById('payClaimsReimbursement');
- const listEl=document.getElementById('payClaimsList');
- if(amountEl)amountEl.value=total.toFixed(2);
- if(listEl)listEl.value=claims.map(c=>`${c.no} (RM ${money(c.amount)})`).join(', ');
- return claims;
-}
-function loadPayrollEmployee(){let e=emp(payEmployee.value);paySalary.value=e.salary||0;payAllowance.value=e.allowance||0;loadPayrollClaims();loadPayrollAdvance();generatePayslip()}
-function markPayrollClaimsPaid(){
- const claims=payrollMonthClaims();
- if(!claims.length){alert('No approved same-month claims are currently included.');return}
- const total=claims.reduce((sum,c)=>sum+Number(c.amount||0),0);
- if(!confirm(`Mark ${claims.length} claim(s), total RM ${money(total)}, as paid with this payroll?`))return;
- claims.forEach(c=>{c.status='Paid';c.paymentDate=payDate.value||today();c.reimburseMethod='Payroll';c.payrollMonth=payMonth.value;});
- saveDB();loadPayrollClaims();generatePayslip();alert('Included claims marked as paid via payroll.');
-}
-function payrollMonthAdvances(){
- const employee=document.getElementById('payEmployee')?.value||'';
- const month=document.getElementById('payMonth')?.value||'';
- if(!employee||!month)return [];
- return (db.advances||[]).filter(a=>a.employee===employee && a.status==='Approved' && (a.deductMonth||'')===month);
-}
-function loadPayrollAdvance(){
- const records=payrollMonthAdvances();
- const total=records.reduce((sum,a)=>sum+Number(a.monthlyDeduction||a.amount||0),0);
- const el=document.getElementById('payAdvanceDeduction');
- if(el)el.value=total.toFixed(2);
- return records;
-}
-function generatePayslip(blank=false){
- let e=blank?{}:emp(payEmployee.value);
- if(!blank)loadPayrollClaims();
- let statutoryWages=num('paySalary')+num('payAllowance')+num('payCommission')+num('payBonus'),
- gross=statutoryWages+num('payOutstationAllowance'),
- epf=statutoryWages*.11,erEpf=statutoryWages<=5000?statutoryWages*.13:statutoryWages*.12,se=socsoEmp(statutoryWages),sr=socsoEr(statutoryWages),ei=eis(statutoryWages),adv=num('payAdvanceDeduction'),other=num('payOtherDeduction'),ded=epf+se+ei+adv+other,
- claims=blank?0:num('payClaimsReimbursement'),netSalary=gross-ded,totalPayable=netSalary+claims,claimList=blank?'':(document.getElementById('payClaimsList')?.value||'');
- payslipPrint.innerHTML=`<div class="a4">${header('SALARY<br>PAYSLIP')}<div class="fx2"><div class="fbox"><div class="fhead">A. EMPLOYEE INFORMATION</div>${row('Employee Name',e.name)}${row('Employee ID',e.id)}${row('IC No.',e.ic)}${row('EPF / KWSP No.',e.epf)}${row('SOCSO / PERKESO No.',e.socso)}${row('Position',e.position)}${row('Bank / Account No.',e.bank)}</div><div class="fbox"><div class="fhead">B. PAYSLIP INFORMATION</div>${row('Payroll Month',payMonth.value)}${row('Payment Date',payDate.value)}${row('Payslip No.',e.id?'PS-'+payMonth.value.replace('-','')+'-'+e.id:'')}${row('Payment Method','Bank Transfer')}</div></div><div class="payslip-grid"><div><table class="ptable"><tr><th>Earnings</th><th class="right">Amount (RM)</th></tr>${tr('Basic Salary',num('paySalary'))}${tr('Fixed Allowance',num('payAllowance'))}${tr('Outstation Allowance',num('payOutstationAllowance'))}${tr('Commission / OT',num('payCommission'))}${tr('Bonus / Adjustment',num('payBonus'))}<tr class="total"><td>Statutory Wages</td><td class="right">${money(statutoryWages)}</td></tr><tr class="total"><td>Gross Earnings</td><td class="right">${money(gross)}</td></tr></table><table class="ptable"><tr><th>Deductions</th><th class="right">Amount (RM)</th></tr>${tr('Employee EPF',epf)}${tr('Employee SOCSO',se)}${tr('Employee EIS',ei)}${tr('Salary Advance Deduction'+(payrollMonthAdvances().length?' ('+payrollMonthAdvances().map(a=>a.id).join(', ')+')':''),adv)}${tr('Other Deduction',other)}<tr class="total"><td>Total Deduction</td><td class="right">${money(ded)}</td></tr></table><div class="net"><div>Net Salary</div><div class="amt">RM ${money(netSalary)}</div></div><table class="ptable" style="margin-top:4mm"><tr><th>Non-Salary Reimbursement</th><th class="right">Amount (RM)</th></tr>${tr('Approved Claims Reimbursement',claims)}<tr class="total"><td>Total Amount Payable</td><td class="right">${money(totalPayable)}</td></tr></table></div><div><table class="ptable"><tr><th>Employer Contribution</th><th class="right">Amount (RM)</th></tr>${tr('Employer EPF',erEpf)}${tr('Employer SOCSO',sr)}${tr('Employer EIS',ei)}<tr class="total"><td>Total Employer Contribution</td><td class="right">${money(erEpf+sr+ei)}</td></tr><tr class="total"><td>Total Employer Cost (Gross Earnings)</td><td class="right">${money(gross+erEpf+sr+ei)}</td></tr><tr class="total"><td>Total Cash Outflow incl. Claims</td><td class="right">${money(gross+erEpf+sr+ei+claims)}</td></tr></table><div class="fbox"><div class="fhead">Claims Included</div><div style="padding:3mm;font-size:8.5pt;min-height:12mm">${claimList||'None'}</div></div><div class="fbox"><div class="fhead">Notes</div><div style="padding:3mm;font-size:8.5pt">Claims reimbursement is shown separately from salary and is not included in EPF, SOCSO or EIS calculations. This is a computer-generated payslip.</div></div></div></div><div class="signature"><div class="sig">Prepared By</div><div class="sig">Checked By</div><div class="sig">Employee Acknowledgement</div></div><div class="footer">Generated by GME Marketing HRMS Professional v4.1</div></div>`
-}
-function checkAdvanceRule(){let d=advPaymentDate.value||advRequestDate.value;advCaseType.value=d?(Number(d.split('-')[2])===20?'Normal Case - 20th of the month':'Exceptional Case - approval required'):''}
-function generateAdvanceForm(blank=false){let e=blank?{}:emp(advEmployee.value);advancePrint.innerHTML=`<div class="a4">${header('SALARY<br>ADVANCE<br>FORM')}<div class="rule"><b>Default Salary Advance Rule:</b><ol><li>Salary advance is normally allowed only on the <b>20th of every month</b>.</li><li>Any request outside the 20th is an exceptional case and requires approval.</li><li>Only one active salary advance is allowed unless approved by management.</li></ol></div><div class="fx2"><div class="fbox"><div class="fhead">A. EMPLOYEE INFORMATION</div>${row('Employee Name',e.name)}${row('Employee ID',e.id)}${row('Position',e.position)}${row('Department',e.department)}</div><div class="fbox"><div class="fhead">B. REQUEST INFORMATION</div>${row('Request Date',blank?'':advRequestDate.value)}${row('Payment Date',blank?'':advPaymentDate.value)}${row('Requested Amount (RM)',blank?'':advAmount.value)}${row('Case Type',blank?'':advCaseType.value)}</div></div><div class="fbox"><div class="fhead">C. REASON / PURPOSE</div><table class="check-table"><tr><td><span class="boxchk"></span>Medical / Emergency</td><td><span class="boxchk"></span>Family Commitment</td></tr><tr><td><span class="boxchk"></span>Transportation</td><td><span class="boxchk"></span>Education</td></tr><tr><td><span class="boxchk"></span>Personal Commitment</td><td><span class="boxchk"></span>Others</td></tr></table><div class="reason-lines"><div class="label-line"><span>Details</span><span><div class="multi-line">${blank?'':advReason.value}</div><div class="multi-line"></div></span></div></div></div><div class="fx2"><div class="fbox"><div class="fhead">D. REPAYMENT METHOD</div>${row('Deduct From Salary Month',blank?'':advDeductMonth.value)}${row('Monthly Deduction (RM)',blank?'':advMonthlyDeduction.value)}</div><div class="fbox"><div class="fhead">E. APPROVAL</div>${row('Status',blank?'':advStatus.value)}${row('Approved By',blank?'':advApprovedBy.value)}${row('Approval Date','')}</div></div><div class="signature"><div class="sig">Requested By</div><div class="sig">Checked By</div><div class="sig">Approved By</div></div><div class="footer">Generated by GME Marketing HRMS Professional v4.1</div></div>`}
-function nextAdvanceId(){let max=0;(db.advances||[]).forEach(a=>{let m=String(a.id||'').match(/(\d+)/);if(m)max=Math.max(max,Number(m[1]))});return 'ADV'+String(max+1).padStart(4,'0')}
-function newAdvance(){selectedAdvanceId='';advEmployee.value='';advRequestDate.value=today();advPaymentDate.value='';advAmount.value='';advDeductMonth.value='';advMonthlyDeduction.value='';advCaseType.value='';advStatus.value='Pending Approval';advApprovedBy.value='';advReason.value='';if(document.getElementById('advAttachments'))advAttachments.value='';if(document.getElementById('advSelectedFiles'))advSelectedFiles.value='';refreshAdvanceAttachments();}
-function previewAdvanceFiles(){
- const files=[...(document.getElementById('advAttachments')?.files||[])];
- const el=document.getElementById('advSelectedFiles');if(el)el.value=files.map(f=>f.name).join(', ');
-}
-function fileToDataURL(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve({name:file.name,type:file.type||'application/octet-stream',size:file.size,data:r.result,addedAt:new Date().toISOString()});r.onerror=()=>reject(new Error('Unable to read '+file.name));r.readAsDataURL(file);});}
-function refreshAdvanceAttachments(){
- const t=document.getElementById('advanceAttachmentTable');if(!t)return;
- const a=(db.advances||[]).find(x=>x.id===selectedAdvanceId);const files=a?.attachments||[];
- t.innerHTML='<tr><th>File</th><th>Size</th><th>Action</th></tr>'+files.map((f,i)=>`<tr><td>${f.name||'Attachment'}</td><td>${Math.max(1,Math.round(Number(f.size||0)/1024))} KB</td><td><button class="btn secondary" onclick="openAdvanceAttachment(${i})">Open</button><button class="btn red" onclick="deleteAdvanceAttachment(${i})">Delete</button></td></tr>`).join('');
- if(!files.length)t.innerHTML+='<tr><td colspan="3" class="note">No saved attachments.</td></tr>';
-}
-function openAdvanceAttachment(index){const a=(db.advances||[]).find(x=>x.id===selectedAdvanceId);const f=a?.attachments?.[index];if(!f?.data)return;const w=window.open();if(w){w.location=f.data}else{const link=document.createElement('a');link.href=f.data;link.download=f.name||'attachment';link.click();}}
-function deleteAdvanceAttachment(index){const a=(db.advances||[]).find(x=>x.id===selectedAdvanceId);if(!a?.attachments?.[index])return;if(confirm('Delete this attachment?')){a.attachments.splice(index,1);a.updatedAt=new Date().toISOString();saveDB();refreshAdvanceAttachments();}}
-async function saveAdvance(){
- if(!advEmployee.value){alert('Please select an employee.');return}
- if(!advRequestDate.value){alert('Please enter the request date.');return}
- if(num('advAmount')<=0){alert('Please enter the requested amount.');return}
- if(advStatus.value==='Approved'&&!advDeductMonth.value){alert('Please select the deduction month for an approved advance.');return}
- const existing=(db.advances||[]).find(a=>a.id===selectedAdvanceId);const attachments=[...(existing?.attachments||[])];
- const newFiles=[...(document.getElementById('advAttachments')?.files||[])];
- const oversized=newFiles.filter(f=>f.size>2*1024*1024);if(oversized.length){alert('These files are above 2 MB and were not added: '+oversized.map(f=>f.name).join(', '));}
- for(const file of newFiles.filter(f=>f.size<=2*1024*1024)){try{attachments.push(await fileToDataURL(file));}catch(err){alert(err.message);}}
- const record={id:selectedAdvanceId||nextAdvanceId(),employee:advEmployee.value,requestDate:advRequestDate.value,date:advRequestDate.value,paymentDate:advPaymentDate.value,amount:num('advAmount'),deductMonth:advDeductMonth.value,monthlyDeduction:num('advMonthlyDeduction')||num('advAmount'),type:advCaseType.value,status:advStatus.value,approvedBy:advApprovedBy.value,reason:advReason.value,attachments,updatedAt:new Date().toISOString()};
- const i=(db.advances||[]).findIndex(a=>a.id===record.id);if(i>=0)db.advances[i]=record;else db.advances.push(record);selectedAdvanceId=record.id;
- try{saveDB();}catch(err){alert('The record could not be saved because browser storage is full. Remove large attachments or export a backup and delete old files.');return}
- if(document.getElementById('advAttachments'))advAttachments.value='';if(document.getElementById('advSelectedFiles'))advSelectedFiles.value='';refreshAdvanceAttachments();refreshAdvanceRegister();loadPayrollAdvance();generatePayslip();alert(i>=0?'Salary advance record updated.':'Salary advance record saved.');
-}
-function editAdvance(id){let a=(db.advances||[]).find(x=>x.id===id);if(!a)return;selectedAdvanceId=id;advEmployee.value=a.employee||'';advRequestDate.value=a.requestDate||a.date||'';advPaymentDate.value=a.paymentDate||'';advAmount.value=a.amount||0;advDeductMonth.value=a.deductMonth||'';advMonthlyDeduction.value=a.monthlyDeduction||a.amount||0;advCaseType.value=a.type||'';advStatus.value=a.status||'Pending Approval';advApprovedBy.value=a.approvedBy||'';advReason.value=a.reason||'';if(document.getElementById('advAttachments'))advAttachments.value='';if(document.getElementById('advSelectedFiles'))advSelectedFiles.value='';refreshAdvanceAttachments();showPage('advance');window.scrollTo({top:0,behavior:'smooth'});}
-function deleteAdvance(){if(!selectedAdvanceId){alert('Please select a saved record using Edit first.');return}let a=(db.advances||[]).find(x=>x.id===selectedAdvanceId);if(!a)return;if(confirm('Delete salary advance '+selectedAdvanceId+' and its attachments?')){db.advances=db.advances.filter(x=>x.id!==selectedAdvanceId);selectedAdvanceId='';saveDB();newAdvance();refreshAdvanceRegister();loadPayrollAdvance();generatePayslip();}}
-function refreshAdvanceRegister(){let q=(document.getElementById('advanceSearch')?.value||'').toLowerCase(),m=document.getElementById('advanceFilterMonth')?.value||'',st=document.getElementById('advanceFilterStatus')?.value||'';let rows=(db.advances||[]).filter(a=>{let e=emp(a.employee);return(!q||[a.id,a.employee,e.name,a.reason,a.approvedBy,a.type,(a.attachments||[]).map(f=>f.name).join(' ')].join(' ').toLowerCase().includes(q))&&(!m||(a.deductMonth||'')===m)&&(!st||a.status===st)}).sort((a,b)=>String(b.requestDate||b.date||'').localeCompare(String(a.requestDate||a.date||'')));let t=document.getElementById('advanceRegisterTable');if(!t)return;t.innerHTML='<tr><th>ID</th><th>Employee</th><th>Request Date</th><th>Amount</th><th>Deduct Month</th><th>Deduction</th><th>Files</th><th>Status</th><th>Action</th></tr>'+rows.map(a=>`<tr><td>${a.id||''}</td><td>${emp(a.employee).name||a.employee||''}</td><td>${a.requestDate||a.date||''}</td><td>RM ${money(a.amount)}</td><td>${a.deductMonth||''}</td><td>RM ${money(a.monthlyDeduction||a.amount)}</td><td>${(a.attachments||[]).length}</td><td>${a.status||''}</td><td><button class="btn secondary" onclick="editAdvance('${a.id}')">Edit / Files</button></td></tr>`).join('');}
+const DB_NAME="GME_Smart_Worksheet_DB";
+const DB_VERSION=1;
+const STORE="worksheets";
+let db;
+let current=null;
+let autosaveTimer=null;
+let deferredPrompt=null;
 
-function calcLeaveDays(){if(!leaveStart.value||!leaveEnd.value)return;leaveDays.value=Math.max(0,Math.round((new Date(leaveEnd.value)-new Date(leaveStart.value))/86400000)+1)}
-function leaveType(){return document.querySelector('input[name="leaveType"]:checked')?.value||'Annual Leave'}
-function generateLeaveForm(blank=false){
-let e=blank?{}:emp(leaveEmployee.value),chosen=blank?'':leaveType();
-const chk=(t)=>chosen===t?'&#10003;':'';
-leavePrint.innerHTML=`<div class="a4">
-${header('LEAVE<br>APPLICATION<br>FORM')}
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+const uuid=()=>crypto.randomUUID?crypto.randomUUID():Date.now()+"_"+Math.random().toString(16).slice(2);
 
-<div class="fx2">
-<div class="fbox">
-<div class="fhead">EMPLOYEE INFORMATION</div>
-${row('Employee Name',e.name)}
-${row('Employee ID',e.id)}
-${row('Position',e.position)}
-${row('Department',e.department)}
-${row('Application Date',blank?'':leaveApplyDate.value)}
-</div>
-
-<div class="fbox">
-<div class="fhead">LEAVE DETAILS</div>
-
-<div style="padding:3mm">
-<b style="font-size:9pt">Leave Type (Tick One)</b>
-<table class="check-table" style="margin-top:2mm">
-<tr>
-<td><span class="boxchk">`+chk('Annual Leave')+`</span>Annual Leave</td>
-<td><span class="boxchk">`+chk('Sick Leave')+`</span>Sick Leave</td>
-</tr>
-<tr>
-<td><span class="boxchk">`+chk('Emergency Leave')+`</span>Emergency Leave</td>
-<td><span class="boxchk">`+chk('Unpaid Leave')+`</span>Unpaid Leave</td>
-</tr>
-<tr>
-<td><span class="boxchk">`+chk('Compassionate Leave')+`</span>Compassionate Leave</td>
-<td><span class="boxchk">`+chk('Others')+`</span>Others</td>
-</tr>
-</table>
-</div>
-
-${row('From',blank?'':leaveStart.value)}
-${row('To',blank?'':leaveEnd.value)}
-${row('Total Days',blank?'':leaveDays.value)}
-</div>
-</div>
-
-<div class="fbox">
-<div class="fhead">REASON</div>
-<div style="padding:4mm">
-<div class="multi-line">`+(blank?'':leaveReason.value)+`</div>
-<div class="multi-line"></div>
-<div class="multi-line"></div>
-</div>
-</div>
-
-<div class="fx2">
-<div class="fbox">
-<div class="fhead">LEAVE BALANCE</div>
-${row('Annual Leave Balance',blank?'':leaveBalance.value+' day(s)')}
-</div>
-
-<div class="fbox">
-<div class="fhead">APPROVAL</div>
-${row('Status',blank?'':leaveStatus.value)}
-${row('Approved By',blank?'':leaveApprovedBy.value)}
-${row('Remarks','')}
-</div>
-</div>
-
-<div class="signature" style="grid-template-columns:1fr 1fr">
-<div class="sig">Employee Signature</div>
-<div class="sig">Manager Approval</div>
-</div>
-
-<div class="footer">Generated by GME Marketing HRMS Professional v4.1</div>
-</div>`;
+function openDB(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open(DB_NAME,DB_VERSION);
+    req.onupgradeneeded=e=>{
+      const d=e.target.result;
+      if(!d.objectStoreNames.contains(STORE)){
+        const s=d.createObjectStore(STORE,{keyPath:"id"});
+        s.createIndex("modifiedAt","modifiedAt");
+        s.createIndex("title","title");
+        s.createIndex("company","company");
+      }
+    };
+    req.onsuccess=e=>{db=e.target.result;resolve(db)};
+    req.onerror=()=>reject(req.error);
+  });
 }
-function saveLeave(){db.leaves.push({employee:leaveEmployee.value,type:leaveType(),start:leaveStart.value,end:leaveEnd.value,days:num('leaveDays'),status:leaveStatus.value});saveDB();alert('Leave record saved')}
+function tx(mode="readonly"){return db.transaction(STORE,mode).objectStore(STORE)}
+function dbPut(obj){return new Promise((res,rej)=>{const r=tx("readwrite").put(obj);r.onsuccess=()=>res(obj);r.onerror=()=>rej(r.error)})}
+function dbGet(id){return new Promise((res,rej)=>{const r=tx().get(id);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+function dbAll(){return new Promise((res,rej)=>{const r=tx().getAll();r.onsuccess=()=>res(r.result||[]);r.onerror=()=>rej(r.error)})}
+function dbDelete(id){return new Promise((res,rej)=>{const r=tx("readwrite").delete(id);r.onsuccess=()=>res();r.onerror=()=>rej(r.error)})}
 
-function refreshDocuments(){
- const t=document.getElementById('documentTable'); if(!t)return;
- const id=empId.value; const e=emp(id); const docs=e.documents||[];
- t.innerHTML='<tr><th>Type</th><th>File Name</th><th>Remarks</th><th>Action</th></tr>'+docs.map((d,i)=>`<tr><td>${d.type}</td><td>${d.name}</td><td>${d.remarks||''}</td><td><button class="btn secondary" onclick="downloadEmployeeDocument('${id}',${i})">Open</button><button class="btn red" onclick="deleteEmployeeDocument('${id}',${i})">Delete</button></td></tr>`).join('');
-}
-function addEmployeeDocument(){
- const id=empId.value; if(!id){alert('Please select or save employee first.');return}
- const e=emp(id); if(!e.id){alert('Employee not found. Please save employee first.');return}
- const file=document.getElementById('docFile').files[0]; if(!file){alert('Please choose a document file.');return}
- const reader=new FileReader();
- reader.onload=function(){
-   e.documents=e.documents||[];
-   e.documents.push({type:docType.value,name:file.name,remarks:docRemarks.value,data:reader.result});
-   saveDB(); docFile.value=''; docRemarks.value=''; refreshDocuments(); alert('Document added.');
- };
- reader.readAsDataURL(file);
-}
-function downloadEmployeeDocument(id,index){
- const e=emp(id); const d=(e.documents||[])[index]; if(!d)return;
- const a=document.createElement('a'); a.href=d.data; a.download=d.name; a.target='_blank'; a.click();
-}
-function deleteEmployeeDocument(id,index){
- const e=emp(id); if(!e.documents)return;
- if(confirm('Delete this document?')){e.documents.splice(index,1);saveDB();refreshDocuments();}
+function blankWorksheet(){
+  return {
+    id:uuid(),title:"Untitled Worksheet",company:"",date:today(),status:"Draft",
+    preparedBy:"",department:"",remarks:"",
+    headers:["Column 1","Column 2","Column 3"],
+    rows:[["","",""],["","",""],["","",""]],
+    formulas:[],attachments:[],createdAt:new Date().toISOString(),modifiedAt:new Date().toISOString()
+  };
 }
 
-
-function calcOutstation(){
- const s=document.getElementById('outStart')?.value, e=document.getElementById('outEnd')?.value;
- if(s && e){
-   const days=Math.max(1,Math.round((new Date(e)-new Date(s))/86400000)+1);
-   outDays.value=days;
- }
- const manual=outManualAmount.value;
- const total=manual!=='' ? Number(manual||0) : Number(outDays.value||0)*Number(outRate.value||db.settings.outstationRate||70);
- outTotal.value=total.toFixed(2);
+function showDashboard(){
+  $("editorView").classList.add("hidden");
+  $("dashboardView").classList.remove("hidden");
+  loadDashboard();
 }
-function saveOutstation(){
- if(!outEmployee.value){alert('Please select employee.');return}
- calcOutstation();
- db.outstations=db.outstations||[];
- db.outstations.push({employee:outEmployee.value,start:outStart.value,end:outEnd.value,days:Number(outDays.value||0),rate:Number(outRate.value||0),manual:outManualAmount.value,total:Number(outTotal.value||0),location:outLocation.value,purpose:outPurpose.value,status:outStatus.value});
- saveDB();alert('Outstation record saved.');
-}
-function generateOutstationForm(blank=false){
- let e=blank?{}:emp(outEmployee.value);
- calcOutstation();
- outstationPrint.innerHTML=`<div class="a4">${header('OUTSTATION<br>ALLOWANCE<br>FORM')}
-<div class="rule"><b>Outstation Allowance Rule:</b><ol><li>Default allowance is <b>RM${money(db.settings.outstationRate||70)} per outstation day</b>.</li><li>Manual amount may be entered for exceptional cases with management approval.</li><li>Record must include date, location/customer, purpose, and approval status.</li></ol></div>
-<div class="fx2"><div class="fbox"><div class="fhead">A. EMPLOYEE INFORMATION</div>${row('Employee Name',e.name)}${row('Employee ID',e.id)}${row('Position',e.position)}${row('Department',e.department)}</div>
-<div class="fbox"><div class="fhead">B. OUTSTATION DETAILS</div>${row('Start Date',blank?'':outStart.value)}${row('End Date',blank?'':outEnd.value)}${row('No. of Days',blank?'':outDays.value)}${row('Location / Customer',blank?'':outLocation.value)}</div></div>
-<div class="fx2"><div class="fbox"><div class="fhead">C. ALLOWANCE CALCULATION</div>${row('Rate / Day',blank?'':'RM '+money(outRate.value||db.settings.outstationRate||70))}${row('Auto Amount',blank?'':'RM '+money(Number(outDays.value||0)*Number(outRate.value||0)))}${row('Manual Amount',blank?'':(outManualAmount.value?'RM '+money(outManualAmount.value):''))}${row('Total Payable',blank?'':'RM '+money(outTotal.value))}</div>
-<div class="fbox"><div class="fhead">D. APPROVAL</div>${row('Status',blank?'':outStatus.value)}${row('Approved By','')}${row('Payment Month','')}</div></div>
-<div class="fbox"><div class="fhead">E. PURPOSE / REMARKS</div><div style="padding:4mm"><div class="multi-line">${blank?'':outPurpose.value}</div><div class="multi-line"></div></div></div>
-<div class="signature"><div class="sig">Requested By</div><div class="sig">Checked By</div><div class="sig">Approved By</div></div>
-<div class="footer">Generated by GME Marketing HRMS Professional v4.1</div></div>`;
+function showEditor(){
+  $("dashboardView").classList.add("hidden");
+  $("editorView").classList.remove("hidden");
 }
 
-
-function saveException(){
- if(!exEmployee.value){alert('Please select employee.');return}
- db.exceptions=db.exceptions||[];
- db.exceptions.push({employee:exEmployee.value,date:exDate.value,type:exType.value,impact:exImpact.value,deduction:Number(exDeduction.value||0),status:exStatus.value,approvedBy:exApprovedBy.value,reason:exReason.value});
- saveDB();alert('Attendance exception saved.');
-}
-function generateExceptionForm(blank=false){
- let e=blank?{}:emp(exEmployee.value);
- exceptionPrint.innerHTML=`<div class="a4">${header('ATTENDANCE<br>EXCEPTION<br>FORM')}
- <div class="rule"><b>Purpose:</b> This form records attendance exceptions only. Daily attendance is not required.</div>
- <div class="fx2"><div class="fbox"><div class="fhead">A. EMPLOYEE INFORMATION</div>${row('Employee Name',e.name)}${row('Employee ID',e.id)}${row('Position',e.position)}${row('Department',e.department)}</div>
- <div class="fbox"><div class="fhead">B. EXCEPTION DETAILS</div>${row('Date',blank?'':exDate.value)}${row('Type',blank?'':exType.value)}${row('Salary Impact',blank?'':exImpact.value)}${row('Deduction Amount',blank?'':'RM '+money(exDeduction.value))}</div></div>
- <div class="fbox"><div class="fhead">C. REASON / REMARKS</div><div style="padding:4mm"><div class="multi-line">${blank?'':exReason.value}</div><div class="multi-line"></div></div></div>
- <div class="fbox"><div class="fhead">D. APPROVAL</div>${row('Status',blank?'':exStatus.value)}${row('Approved By',blank?'':exApprovedBy.value)}${row('Approval Date','')}</div>
- <div class="signature"><div class="sig">Employee</div><div class="sig">Checked By</div><div class="sig">Approved By</div></div><div class="footer">Generated by GME Marketing HRMS Professional v4.1</div></div>`;
-}
-function saveAsset(){
- if(!assetEmployee.value){alert('Please select employee.');return}
- db.assets=db.assets||[];
- db.assets.push({employee:assetEmployee.value,issueDate:assetIssueDate.value,type:assetType.value,desc:assetDesc.value,serial:assetSerial.value,condition:assetCondition.value,status:assetStatus.value,returnDate:assetReturnDate.value,remarks:assetRemarks.value});
- saveDB();alert('Asset record saved.');
-}
-function generateAssetForm(blank=false){
- let e=blank?{}:emp(assetEmployee.value);
- assetPrint.innerHTML=`<div class="a4">${header('ASSET / EQUIPMENT<br>ISSUE FORM')}
- <div class="fx2"><div class="fbox"><div class="fhead">A. EMPLOYEE INFORMATION</div>${row('Employee Name',e.name)}${row('Employee ID',e.id)}${row('Position',e.position)}${row('Department',e.department)}</div>
- <div class="fbox"><div class="fhead">B. ASSET DETAILS</div>${row('Issue Date',blank?'':assetIssueDate.value)}${row('Asset Type',blank?'':assetType.value)}${row('Description',blank?'':assetDesc.value)}${row('Serial / Card No.',blank?'':assetSerial.value)}${row('Condition',blank?'':assetCondition.value)}${row('Status',blank?'':assetStatus.value)}${row('Return Date',blank?'':assetReturnDate.value)}</div></div>
- <div class="fbox"><div class="fhead">C. ACKNOWLEDGEMENT</div><div style="padding:4mm;font-size:9pt">The employee acknowledges receipt of the above company asset/equipment and agrees to return it in good condition upon request or upon leaving the Company.</div></div>
- <div class="fbox"><div class="fhead">D. REMARKS</div><div style="padding:4mm"><div class="multi-line">${blank?'':assetRemarks.value}</div><div class="multi-line"></div></div></div>
- <div class="signature"><div class="sig">Issued By</div><div class="sig">Received By</div><div class="sig">Returned / Checked By</div></div><div class="footer">Generated by GME Marketing HRMS Professional v4.1</div></div>`;
-}
-function saveVehicle(){
- if(!vehEmployee.value){alert('Please select employee.');return}
- db.vehicles=db.vehicles||[];
- db.vehicles.push({employee:vehEmployee.value,date:vehDate.value,plate:vehPlate.value,type:vehType.value,fuelCard:vehFuelCard.value,tng:vehTng.value,mileage:Number(vehMileage.value||0),status:vehStatus.value,remarks:vehRemarks.value});
- saveDB();alert('Vehicle assignment saved.');
-}
-function generateVehicleForm(blank=false){
- let e=blank?{}:emp(vehEmployee.value);
- vehiclePrint.innerHTML=`<div class="a4">${header('VEHICLE<br>ASSIGNMENT<br>FORM')}
- <div class="fx2"><div class="fbox"><div class="fhead">A. DRIVER / EMPLOYEE</div>${row('Employee Name',e.name)}${row('Employee ID',e.id)}${row('Position',e.position)}${row('Department',e.department)}</div>
- <div class="fbox"><div class="fhead">B. VEHICLE DETAILS</div>${row('Assignment Date',blank?'':vehDate.value)}${row('Vehicle Plate No.',blank?'':vehPlate.value)}${row('Vehicle Type',blank?'':vehType.value)}${row('Fuel Card No.',blank?'':vehFuelCard.value)}${row('Touch n Go Card No.',blank?'':vehTng.value)}${row('Start Mileage',blank?'':vehMileage.value)}${row('Status',blank?'':vehStatus.value)}</div></div>
- <div class="fbox"><div class="fhead">C. TERMS</div><div style="padding:4mm;font-size:9pt">The assigned employee is responsible for proper use of the vehicle, cards and keys issued, and must report any accident, loss, damage, summons or maintenance issue immediately.</div></div>
- <div class="fbox"><div class="fhead">D. REMARKS</div><div style="padding:4mm"><div class="multi-line">${blank?'':vehRemarks.value}</div><div class="multi-line"></div></div></div>
- <div class="signature"><div class="sig">Issued By</div><div class="sig">Received By</div><div class="sig">Returned / Checked By</div></div><div class="footer">Generated by GME Marketing HRMS Professional v4.1</div></div>`;
+function syncMetaToCurrent(){
+  current.title=$("docTitle").value.trim()||"Untitled Worksheet";
+  current.company=$("company").value.trim();
+  current.date=$("docDate").value||today();
+  current.status=$("docStatus").value;
+  current.preparedBy=$("preparedBy").value.trim();
+  current.department=$("department").value.trim();
+  current.remarks=$("remarks").value;
+  current.modifiedAt=new Date().toISOString();
 }
 
-
-function nextClaimNo(){let y=new Date().getFullYear(),max=0;(db.claims||[]).forEach(c=>{let m=String(c.no||'').match(/(\d+)$/);if(m)max=Math.max(max,Number(m[1]))});return 'CLM-'+y+'-'+String(max+1).padStart(4,'0')}
-function newClaim(){claimNo.value=nextClaimNo();claimEmployee.value='';claimDate.value=today();expenseDate.value=today();claimType.value='Travel';claimCategory.value='';claimCustomer.value='';claimProject.value='';claimPaidBy.value='Cash';claimBudget.value=0;claimAmount.value=0;claimStatus.value='Draft';claimApprovedBy.value='';claimPaymentDate.value='';claimReimburseMethod.value='Bank Transfer';claimDescription.value='';claimReceipt.value='';claimReceiptRemarks.value='';activityName.value='';activityDate.value=today();activityVenue.value='';activityOrganizer.value='';activityParticipants.value=0;activityNames.value='';calcClaimVariance();toggleClaimFields()}
-function toggleClaimFields(){staffActivityFields.style.display=claimType.value==='Staff Welfare / Engagement'?'block':'none'}
-function calcClaimVariance(){let b=num('claimBudget'),a=num('claimAmount'),v=b-a;claimVariance.value=v.toFixed(2);claimBudgetStatus.value=b<=0?'No Budget Set':(a<=b?'Within Budget':'Over Budget')}
-function claimReceiptData(){return new Promise(resolve=>{let f=claimReceipt.files[0];if(!f)return resolve(null);let r=new FileReader();r.onload=()=>resolve({name:f.name,type:f.type,data:r.result,remarks:claimReceiptRemarks.value});r.onerror=()=>resolve(null);r.readAsDataURL(f)})}
-async function saveClaim(){if(!claimEmployee.value){alert('Please select claimant / employee.');return}if(num('claimAmount')<=0){alert('Please enter claimed amount.');return}calcClaimVariance();let existing=(db.claims||[]).find(c=>c.no===claimNo.value);let receipt=await claimReceiptData();let record={no:claimNo.value||nextClaimNo(),employee:claimEmployee.value,claimDate:claimDate.value,expenseDate:expenseDate.value,type:claimType.value,category:claimCategory.value,customer:claimCustomer.value,project:claimProject.value,paidBy:claimPaidBy.value,budget:num('claimBudget'),amount:num('claimAmount'),variance:num('claimVariance'),budgetStatus:claimBudgetStatus.value,status:claimStatus.value,approvedBy:claimApprovedBy.value,paymentDate:claimPaymentDate.value,reimburseMethod:claimReimburseMethod.value,description:claimDescription.value,activity:{name:activityName.value,date:activityDate.value,venue:activityVenue.value,organizer:activityOrganizer.value,participants:num('activityParticipants'),names:activityNames.value},receipt:receipt||(existing&&existing.receipt)||null};db.claims=db.claims||[];let i=db.claims.findIndex(c=>c.no===record.no);i>=0?db.claims[i]=record:db.claims.push(record);saveDB();claimNo.value=record.no;alert('Expense claim saved.')}
-function editClaim(no){let c=(db.claims||[]).find(x=>x.no===no);if(!c)return;claimNo.value=c.no;claimEmployee.value=c.employee||'';claimDate.value=c.claimDate||'';expenseDate.value=c.expenseDate||'';claimType.value=c.type||'Travel';claimCategory.value=c.category||'';claimCustomer.value=c.customer||'';claimProject.value=c.project||'';claimPaidBy.value=c.paidBy||'Cash';claimBudget.value=c.budget||0;claimAmount.value=c.amount||0;claimStatus.value=c.status||'Draft';claimApprovedBy.value=c.approvedBy||'';claimPaymentDate.value=c.paymentDate||'';claimReimburseMethod.value=c.reimburseMethod||'Bank Transfer';claimDescription.value=c.description||'';claimReceiptRemarks.value=c.receipt?.remarks||'';activityName.value=c.activity?.name||'';activityDate.value=c.activity?.date||'';activityVenue.value=c.activity?.venue||'';activityOrganizer.value=c.activity?.organizer||'';activityParticipants.value=c.activity?.participants||0;activityNames.value=c.activity?.names||'';calcClaimVariance();toggleClaimFields();showPage('expenses')}
-function openClaimReceipt(no){let c=(db.claims||[]).find(x=>x.no===no);if(!c?.receipt?.data){alert('No receipt attached.');return}let a=document.createElement('a');a.href=c.receipt.data;a.download=c.receipt.name||'receipt';a.target='_blank';a.click()}
-function deleteClaim(no){if(confirm('Delete this claim record?')){db.claims=(db.claims||[]).filter(c=>c.no!==no);saveDB();newClaim()}}
-function refreshClaimRegister(){let t=document.getElementById('claimRegisterTable');if(!t)return;t.innerHTML='<tr><th>Claim No.</th><th>Employee</th><th>Date</th><th>Type</th><th>Description</th><th>Budget</th><th>Actual</th><th>Status</th><th>Action</th></tr>'+(db.claims||[]).map(c=>`<tr><td>${c.no||''}</td><td>${emp(c.employee).name||c.employee||''}</td><td>${c.expenseDate||''}</td><td>${c.type||''}</td><td>${c.category||c.description||''}</td><td>RM ${money(c.budget)}</td><td>RM ${money(c.amount)}</td><td>${c.status||''}</td><td><button class="btn secondary" onclick="editClaim('${c.no}')">Edit</button>${c.receipt?`<button class="btn secondary" onclick="openClaimReceipt('${c.no}')">Receipt</button>`:''}<button class="btn red" onclick="deleteClaim('${c.no}')">Delete</button></td></tr>`).join('')}
-function generateClaimForm(blank=false){let c=blank?{}:(db.claims||[]).find(x=>x.no===claimNo.value)||{no:claimNo.value,employee:claimEmployee.value,claimDate:claimDate.value,expenseDate:expenseDate.value,type:claimType.value,category:claimCategory.value,customer:claimCustomer.value,project:claimProject.value,paidBy:claimPaidBy.value,budget:num('claimBudget'),amount:num('claimAmount'),variance:num('claimVariance'),budgetStatus:claimBudgetStatus.value,status:claimStatus.value,approvedBy:claimApprovedBy.value,paymentDate:claimPaymentDate.value,reimburseMethod:claimReimburseMethod.value,description:claimDescription.value,activity:{name:activityName.value,date:activityDate.value,venue:activityVenue.value,organizer:activityOrganizer.value,participants:num('activityParticipants'),names:activityNames.value}};let e=blank?{}:emp(c.employee);let activity=(c.type==='Staff Welfare / Engagement')?`<div class="fbox"><div class="fhead">D. STAFF WELFARE / ENGAGEMENT DETAILS</div>${row('Activity Name',c.activity?.name)}${row('Activity Date',c.activity?.date)}${row('Venue',c.activity?.venue)}${row('Organizer',c.activity?.organizer)}${row('No. of Participants',c.activity?.participants)}${row('Participants',c.activity?.names)}</div>`:'';claimPrint.innerHTML=`<div class="a4">${header('EXPENSE &<br>CLAIM FORM')}<div class="fx2"><div class="fbox"><div class="fhead">A. CLAIMANT INFORMATION</div>${row('Employee Name',e.name)}${row('Employee ID',e.id)}${row('Position',e.position)}${row('Department',e.department)}</div><div class="fbox"><div class="fhead">B. CLAIM INFORMATION</div>${row('Claim No.',blank?'':c.no)}${row('Claim Date',blank?'':c.claimDate)}${row('Expense Date',blank?'':c.expenseDate)}${row('Expense Type',blank?'':c.type)}${row('Category / Item',blank?'':c.category)}${row('Status',blank?'':c.status)}</div></div><div class="fx2"><div class="fbox"><div class="fhead">C. EXPENSE DETAILS</div>${row('Customer / Supplier',blank?'':c.customer)}${row('Project / Job',blank?'':c.project)}${row('Paid By',blank?'':c.paidBy)}${row('Budget Amount',blank?'':'RM '+money(c.budget))}${row('Actual / Claimed',blank?'':'RM '+money(c.amount))}${row('Variance',blank?'':'RM '+money(c.variance))}${row('Budget Status',blank?'':c.budgetStatus)}</div><div class="fbox"><div class="fhead">PAYMENT & APPROVAL</div>${row('Approved By',blank?'':c.approvedBy)}${row('Payment Date',blank?'':c.paymentDate)}${row('Reimbursement Method',blank?'':c.reimburseMethod)}${row('Receipt Attached',blank?'':(c.receipt?'Yes':'No'))}</div></div>${activity}<div class="fbox"><div class="fhead">E. DESCRIPTION / BUSINESS PURPOSE</div><div style="padding:4mm"><div class="multi-line">${blank?'':c.description||''}</div><div class="multi-line"></div></div></div><div class="signature"><div class="sig">Submitted By</div><div class="sig">Checked By</div><div class="sig">Approved By</div></div><div class="footer">Generated by GME Marketing HRMS Professional v4.1</div></div>`}
-
-
-let selectedCompanyExpenseNo='';
-function ce(id){return document.getElementById(id)}
-function nextCompanyExpenseNo(){let y=new Date().getFullYear(),max=0;(db.companyExpenses||[]).forEach(x=>{let m=String(x.no||'').match(/(\d+)$/);if(m)max=Math.max(max,Number(m[1]))});return 'CEX-'+y+'-'+String(max+1).padStart(4,'0')}
-function persistCompanyExpenses(){
- try{localStorage.setItem('gmeCompanyExpensesV1',JSON.stringify(db.companyExpenses||[]));return true}
- catch(err){console.error(err);return false}
-}
-function newCompanyExpense(){
- selectedCompanyExpenseNo='';
- const values={coExpNo:nextCompanyExpenseNo(),coExpDate:today(),coExpMonth:monthNow(),coExpSupplier:'',coExpAmount:0,coExpBank:'',coExpReference:'',coExpInvoice:'',coExpDescription:'',coExpFileRemarks:''};
- Object.entries(values).forEach(([id,v])=>{const e=ce(id);if(e)e.value=v});
- if(ce('coExpCategory'))ce('coExpCategory').selectedIndex=0;
- if(ce('coExpAccount'))ce('coExpAccount').value='Company Bank Account';
- if(ce('coExpStatus'))ce('coExpStatus').value='Paid';
- if(ce('coExpTax'))ce('coExpTax').value='Normal Business Expense';
- if(ce('coExpFiles'))ce('coExpFiles').value='';
- renderCompanyExpenseFiles([]);
-}
-function readCompanyExpenseFiles(){
- const input=ce('coExpFiles'),remarks=ce('coExpFileRemarks')?.value||'';
- return Promise.all(Array.from(input?.files||[]).map(f=>new Promise(resolve=>{
-  if(f.size>2*1024*1024){resolve({error:true,name:f.name,reason:'above 2 MB'});return}
-  let r=new FileReader();
-  r.onload=()=>resolve({name:f.name,type:f.type,size:f.size,data:r.result,remarks,uploadedAt:new Date().toISOString()});
-  r.onerror=()=>resolve({error:true,name:f.name,reason:'could not be read'});
-  r.readAsDataURL(f);
- })));
-}
-async function saveCompanyExpense(){
- const date=ce('coExpDate')?.value||'', supplier=(ce('coExpSupplier')?.value||'').trim(), amount=Number(ce('coExpAmount')?.value||0);
- if(!date){alert('Please enter the payment date.');return}
- if(!supplier){alert('Please enter supplier / payee.');return}
- if(amount<=0){alert('Please enter the amount paid.');return}
- const no=ce('coExpNo')?.value||nextCompanyExpenseNo();
- const existing=(db.companyExpenses||[]).find(x=>x.no===no);
- const files=await readCompanyExpenseFiles();
- const rejected=files.filter(x=>x?.error),valid=files.filter(x=>x&&!x.error);
- const baseAttachments=[...((existing&&existing.attachments)||[])];
- const record={no,date,month:ce('coExpMonth')?.value||date.slice(0,7),supplier,category:ce('coExpCategory')?.value||'Other Company Expense',amount,account:ce('coExpAccount')?.value||'Company Bank Account',bank:ce('coExpBank')?.value||'',reference:ce('coExpReference')?.value||'',invoice:ce('coExpInvoice')?.value||'',status:ce('coExpStatus')?.value||'Paid',taxTreatment:ce('coExpTax')?.value||'To Be Confirmed',description:ce('coExpDescription')?.value||'',attachments:[...baseAttachments,...valid],updatedAt:new Date().toISOString()};
- db.companyExpenses=db.companyExpenses||[];
- const oldIndex=db.companyExpenses.findIndex(x=>x.no===record.no), oldRecord=oldIndex>=0?db.companyExpenses[oldIndex]:null;
- if(oldIndex>=0)db.companyExpenses[oldIndex]=record;else db.companyExpenses.push(record);
- let saved=persistCompanyExpenses();
- let attachmentsSkipped=false;
- if(!saved&&valid.length){
-  record.attachments=baseAttachments;
-  if(oldIndex>=0)db.companyExpenses[oldIndex]=record;else db.companyExpenses[db.companyExpenses.length-1]=record;
-  saved=persistCompanyExpenses();attachmentsSkipped=saved;
- }
- if(!saved){
-  if(oldIndex>=0)db.companyExpenses[oldIndex]=oldRecord;else db.companyExpenses.pop();
-  alert('Unable to save because this browser storage is full. Please export a JSON backup and remove some large documents or attachments, then try again.');return;
- }
- selectedCompanyExpenseNo=record.no;
- markBackupDirty();refreshAll();
- if(ce('coExpFiles'))ce('coExpFiles').value='';
- renderCompanyExpenseFiles(record.attachments||[]);
- let msg='Company account expense saved successfully.';
- if(attachmentsSkipped)msg+=' The record was saved, but the new attachment was skipped because browser storage is full.';
- if(rejected.length)msg+=' Files not added: '+rejected.map(x=>x.name+' ('+x.reason+')').join(', ')+'.';
- alert(msg);
-}
-function editCompanyExpense(no){
- let x=(db.companyExpenses||[]).find(e=>e.no===no);if(!x)return;selectedCompanyExpenseNo=x.no;
- const values={coExpNo:x.no,coExpDate:x.date||'',coExpMonth:x.month||String(x.date||'').slice(0,7),coExpSupplier:x.supplier||'',coExpCategory:x.category||'Other Company Expense',coExpAmount:x.amount||0,coExpAccount:x.account||'Company Bank Account',coExpBank:x.bank||'',coExpReference:x.reference||'',coExpInvoice:x.invoice||'',coExpStatus:x.status||'Paid',coExpTax:x.taxTreatment||'To Be Confirmed',coExpDescription:x.description||'',coExpFileRemarks:''};
- Object.entries(values).forEach(([id,v])=>{const e=ce(id);if(e)e.value=v});if(ce('coExpFiles'))ce('coExpFiles').value='';renderCompanyExpenseFiles(x.attachments||[]);showPage('companyexpenses');window.scrollTo({top:0,behavior:'smooth'});
-}
-function deleteCompanyExpense(){let no=selectedCompanyExpenseNo||ce('coExpNo')?.value;if(!no||!(db.companyExpenses||[]).some(x=>x.no===no)){alert('Please select an existing record first.');return}if(confirm('Delete company expense '+no+'?')){db.companyExpenses=(db.companyExpenses||[]).filter(x=>x.no!==no);if(!persistCompanyExpenses()){alert('Unable to update browser storage.');return}markBackupDirty();refreshAll();newCompanyExpense()}}
-function renderCompanyExpenseFiles(files){let box=ce('coExpExistingFiles');if(!box)return;box.innerHTML=files.length?files.map((f,i)=>`<span class="file-chip">📎 ${escapeHtml(f.name||'Attachment')} <button type="button" class="btn secondary" style="min-height:28px;padding:3px 7px;margin:0" onclick="openCompanyExpenseFile(${i})">Open</button><button type="button" class="btn red" style="min-height:28px;padding:3px 7px;margin:0" onclick="removeCompanyExpenseFile(${i})">×</button></span>`).join(''):'<span class="note">No attachment saved.</span>'}
-function openCompanyExpenseFile(index){let x=(db.companyExpenses||[]).find(e=>e.no===(selectedCompanyExpenseNo||ce('coExpNo')?.value));let f=x?.attachments?.[index];if(!f?.data){alert('Attachment not found.');return}let a=document.createElement('a');a.href=f.data;a.download=f.name||'attachment';a.target='_blank';a.click()}
-function removeCompanyExpenseFile(index){let x=(db.companyExpenses||[]).find(e=>e.no===(selectedCompanyExpenseNo||ce('coExpNo')?.value));if(!x)return;if(confirm('Remove this attachment?')){x.attachments.splice(index,1);if(!persistCompanyExpenses()){alert('Unable to update browser storage.');return}markBackupDirty();refreshAll();renderCompanyExpenseFiles(x.attachments)}}
-function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
-function companyExpenseFiltered(){let m=ce('coExpFilterMonth')?.value||'',cat=ce('coExpFilterCategory')?.value||'',q=(ce('coExpSearch')?.value||'').toLowerCase();return (db.companyExpenses||[]).filter(x=>(!m||(x.month||x.date||'').startsWith(m))&&(!cat||x.category===cat)&&(!q||[x.no,x.supplier,x.reference,x.invoice,x.description,x.category].join(' ').toLowerCase().includes(q))).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')))}
-function refreshCompanyExpenseRegister(){let cat=ce('coExpFilterCategory');if(cat&&cat.options.length<=1){let current=cat.value;let cats=[...new Set((db.companyExpenses||[]).map(x=>x.category).filter(Boolean))].sort();cat.innerHTML='<option value="">All Categories</option>'+cats.map(x=>`<option>${escapeHtml(x)}</option>`).join('');cat.value=current}let rows=companyExpenseFiltered();let total=rows.filter(x=>x.status!=='Cancelled').reduce((s,x)=>s+Number(x.amount||0),0),paid=rows.filter(x=>x.status==='Paid').reduce((s,x)=>s+Number(x.amount||0),0),pending=rows.filter(x=>['Pending','Partially Paid'].includes(x.status)).reduce((s,x)=>s+Number(x.amount||0),0);const vals={coExpMonthTotal:'RM '+money(total),coExpPaidTotal:'RM '+money(paid),coExpPendingTotal:'RM '+money(pending),coExpRecordCount:rows.length};Object.entries(vals).forEach(([id,v])=>{if(ce(id))ce(id).textContent=v});let t=ce('companyExpenseTable');if(t)t.innerHTML='<tr><th>No.</th><th>Date</th><th>Supplier / Payee</th><th>Category</th><th>Paid From</th><th>Reference</th><th>Amount</th><th>Status</th><th>Files</th><th>Action</th></tr>'+rows.map(x=>`<tr><td>${escapeHtml(x.no)}</td><td>${escapeHtml(x.date)}</td><td>${escapeHtml(x.supplier)}</td><td>${escapeHtml(x.category)}</td><td>${escapeHtml(x.account)}</td><td>${escapeHtml(x.reference||x.invoice||'')}</td><td>RM ${money(x.amount)}</td><td>${escapeHtml(x.status)}</td><td>${(x.attachments||[]).length}</td><td><button class="btn secondary" onclick="editCompanyExpense('${x.no}')">Edit</button></td></tr>`).join('')}
-function exportCompanyExpensesCSV(){let rows=companyExpenseFiltered();if(!rows.length){alert('No company expense records found for the selected filter.');return}let headers=['Record No','Payment Date','Accounting Month','Supplier / Payee','Category','Description','Paid From','Bank / Account','Payment Reference','Invoice / Receipt No','Amount (RM)','Status','Tax Treatment','Attachment Count'];let csv=[headers,...rows.map(x=>[x.no,x.date,x.month,x.supplier,x.category,x.description,x.account,x.bank,x.reference,x.invoice,Number(x.amount||0).toFixed(2),x.status,x.taxTreatment,(x.attachments||[]).length])].map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');let blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}),a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download='GME_Company_Expenses_'+(ce('coExpFilterMonth')?.value||'All')+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-
-function refreshReports(){
- refreshClaimRegister();
- advanceTable.innerHTML='<tr><th>ID</th><th>Employee</th><th>Request Date</th><th>Amount</th><th>Deduct Month</th><th>Monthly Deduction</th><th>Status</th><th>Action</th></tr>'+(db.advances||[]).map(a=>`<tr><td>${a.id||''}</td><td>${emp(a.employee).name||a.employee||''}</td><td>${a.requestDate||a.date||''}</td><td>RM ${money(a.amount)}</td><td>${a.deductMonth||''}</td><td>RM ${money(a.monthlyDeduction||a.amount)}</td><td>${a.status||''}</td><td><button class="btn secondary" onclick="editAdvance('${a.id}')">Edit</button></td></tr>`).join('');
- leaveTable.innerHTML='<tr><th>Employee</th><th>Type</th><th>Start</th><th>End</th><th>Days</th><th>Status</th></tr>'+db.leaves.map(l=>`<tr><td>${l.employee}</td><td>${l.type}</td><td>${l.start}</td><td>${l.end}</td><td>${l.days}</td><td>${l.status}</td></tr>`).join('');
- if(document.getElementById('outstationTable')) outstationTable.innerHTML='<tr><th>Employee</th><th>Start</th><th>End</th><th>Days</th><th>Location</th><th>Total</th><th>Status</th></tr>'+(db.outstations||[]).map(o=>`<tr><td>${o.employee}</td><td>${o.start}</td><td>${o.end}</td><td>${o.days}</td><td>${o.location||''}</td><td>RM ${money(o.total)}</td><td>${o.status}</td></tr>`).join('');
- if(document.getElementById('exceptionTable')) exceptionTable.innerHTML='<tr><th>Employee</th><th>Date</th><th>Type</th><th>Impact</th><th>Deduction</th><th>Status</th></tr>'+(db.exceptions||[]).map(x=>`<tr><td>${x.employee}</td><td>${x.date}</td><td>${x.type}</td><td>${x.impact}</td><td>RM ${money(x.deduction)}</td><td>${x.status}</td></tr>`).join('');
- if(document.getElementById('assetTable')) assetTable.innerHTML='<tr><th>Employee</th><th>Issue Date</th><th>Type</th><th>Description</th><th>Serial</th><th>Status</th></tr>'+(db.assets||[]).map(a=>`<tr><td>${a.employee}</td><td>${a.issueDate}</td><td>${a.type}</td><td>${a.desc||''}</td><td>${a.serial||''}</td><td>${a.status}</td></tr>`).join('');
- if(document.getElementById('vehicleTable')) vehicleTable.innerHTML='<tr><th>Employee</th><th>Date</th><th>Plate</th><th>Type</th><th>Fuel Card</th><th>TnG</th><th>Status</th></tr>'+(db.vehicles||[]).map(v=>`<tr><td>${v.employee}</td><td>${v.date}</td><td>${v.plate||''}</td><td>${v.type||''}</td><td>${v.fuelCard||''}</td><td>${v.tng||''}</td><td>${v.status}</td></tr>`).join('');
- if(document.getElementById('expenseTable')) expenseTable.innerHTML='<tr><th>Claim No.</th><th>Employee</th><th>Date</th><th>Type</th><th>Amount</th><th>Budget Status</th><th>Status</th></tr>'+(db.claims||[]).map(c=>`<tr><td>${c.no||''}</td><td>${emp(c.employee).name||c.employee||''}</td><td>${c.expenseDate||''}</td><td>${c.type||''}</td><td>RM ${money(c.amount)}</td><td>${c.budgetStatus||''}</td><td>${c.status||''}</td></tr>`).join('');
- if(document.getElementById('companyExpenseReportTable')) companyExpenseReportTable.innerHTML='<tr><th>No.</th><th>Date</th><th>Supplier</th><th>Category</th><th>Paid From</th><th>Amount</th><th>Status</th></tr>'+(db.companyExpenses||[]).map(x=>`<tr><td>${escapeHtml(x.no||'')}</td><td>${escapeHtml(x.date||'')}</td><td>${escapeHtml(x.supplier||'')}</td><td>${escapeHtml(x.category||'')}</td><td>${escapeHtml(x.account||'')}</td><td>RM ${money(x.amount)}</td><td>${escapeHtml(x.status||'')}</td></tr>`).join('');
+function renderMeta(){
+  $("docTitle").value=current.title||"";
+  $("company").value=current.company||"";
+  $("docDate").value=current.date||today();
+  $("docStatus").value=current.status||"Draft";
+  $("preparedBy").value=current.preparedBy||"";
+  $("department").value=current.department||"";
+  $("remarks").value=current.remarks||"";
 }
 
-function generateContract(blank=false){
-let e=blank?{}:emp(contractEmployee.value);
-const cv=(v)=>blank?'':(v||'');
-const r=(l,v='')=>`<div class="contract-row"><div class="contract-label">${l}</div><div class="contract-value"><div class="contract-line">${v||''}</div></div></div>`;
-contractPrint.innerHTML=`<div class="a4 contract-a4">${header('EMPLOYMENT<br>CONTRACT')}
-
-<div class="contract-section">
-<div class="contract-section-title">A. PARTIES</div>
-<div class="contract-text">
-This Employment Contract is made between <b>${db.settings.companyName}</b> (Company Registration No.: ${db.settings.companyNo}), hereinafter referred to as <b>"the Company"</b>, and the employee named below, hereinafter referred to as <b>"the Employee"</b>.
-</div>
-</div>
-
-<div class="contract-grid">
-<div class="contract-section">
-<div class="contract-section-title">B. EMPLOYEE INFORMATION</div>
-${r('Employee Name',cv(e.name))}
-${r('Employee ID',cv(e.id))}
-${r('IC No.',cv(e.ic))}
-${r('EPF / KWSP No.',cv(e.epf))}
-${r('SOCSO / PERKESO No.',cv(e.socso))}
-${r('Income Tax No.',cv(e.tax))}
-</div>
-
-<div class="contract-section">
-<div class="contract-section-title">C. EMPLOYMENT DETAILS</div>
-${r('Position',cv(e.position))}
-${r('Department',cv(e.department))}
-${r('Start Date',cv(contractStartDate.value))}
-${r('Contract Type',cv(contractType.value))}
-${r('Probation Period',cv(contractProbation.value||db.settings.probation||'3 months'))}
-${r('Work Location',cv(contractLocation.value))}
-</div>
-</div>
-
-<div class="contract-grid">
-<div class="contract-section">
-<div class="contract-section-title">D. SALARY & BENEFITS</div>
-${r('Basic Salary',blank?'':'RM '+money(e.salary||0))}
-${r('Fixed Allowance',blank?'':'RM '+money(e.allowance||0)+' per month')}
-${r('Variable Allowance',blank?'':'Outstation RM '+money(db.settings.outstationRate||70)+' / approved day, or management approved amount')}
-${r('EPF / SOCSO / EIS',blank?'':'Subject to statutory requirement')}
-${r('Annual Leave',cv(contractAnnualLeave.value||((e.annualEntitlement||8)+' days per year')))}
-${r('Public Holiday',cv(db.settings.publicHoliday||'Malaysia gazetted public holidays applicable in Sabah'))}
-</div>
-
-<div class="contract-section">
-<div class="contract-section-title">E. WORKING ARRANGEMENT</div>
-${r('Mon–Fri',cv(db.settings.weekdayHours||'Monday to Friday, 8:00 AM – 5:00 PM'))}
-${r('Saturday',cv(db.settings.saturdayHours||'Saturday, 8:00 AM – 1:00 PM'))}
-${r('Rest Day',cv(db.settings.restDay||'Sunday'))}
-${r('Notice Period',cv(contractNotice.value||db.settings.notice||'1 month'))}
-${r('Salary Payment',cv(db.settings.salaryPayment||'On or before the 7th day of the following month'))}
-</div>
-</div>
-
-<div class="contract-section">
-<div class="contract-section-title">F. TERMS & CONDITIONS</div>
-<div class="contract-text">
-<ol>
-<li>The Employee shall perform duties honestly, diligently, and in the best interest of the Company.</li>
-<li>The Employee shall comply with all company rules, safety procedures, attendance requirements, and reasonable instructions.</li>
-<li>The Employee shall keep company information, customer information, pricing, documents, and business matters confidential.</li>
-<li>Salary payment, leave, overtime, statutory contributions, and termination shall follow applicable Malaysian employment laws and Company policy.</li>
-<li>Either party may terminate employment by giving the notice stated above or payment in lieu of notice, subject to applicable law.</li>
-</ol>
-</div>
-</div>
-
-<div class="contract-section">
-<div class="contract-section-title">G. ADDITIONAL TERMS / REMARKS</div>
-<div class="contract-remarks">
-<div class="multi-line">${blank?'':contractRemarks.value}</div>
-<div class="multi-line"></div>
-</div>
-</div>
-
-<div class="contract-signature">
-<div class="sig">For and on behalf of Company<br><small>Signature / Name / Date</small></div>
-<div class="sig">Employee Acceptance<br><small>Signature / Name / Date</small></div>
-</div>
-
-<div class="footer">Generated by GME Marketing HRMS Professional v4.1</div>
-</div>`;
+function parseNumber(v){
+  const n=Number(String(v??"").replace(/,/g,"").replace(/[^\d.-]/g,""));
+  return Number.isFinite(n)?n:null;
 }
-function printOnly(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('printing'));document.getElementById(id).classList.add('printing');setTimeout(()=>window.print(),150)}
-function saveSettings(){db.settings={companyName:setCompanyName.value,companyNo:setCompanyNo.value,tel:setTel.value,email:setEmail.value,address:setAddress.value,weekdayHours:setWeekdayHours.value,saturdayHours:setSaturdayHours.value,restDay:setRestDay.value,publicHoliday:setPublicHoliday.value,probation:setProbation.value,notice:setNotice.value,salaryPayment:setSalaryPayment.value,outstationRate:Number(setOutstationRate.value||70),employerEpf:setEmployerEpf.value,employerSocso:setEmployerSocso.value,employerTax:setEmployerTax.value};saveDB();alert('Settings saved')}
-function loadSettings(){setCompanyName.value=db.settings.companyName;setCompanyNo.value=db.settings.companyNo;setTel.value=db.settings.tel;setEmail.value=db.settings.email;setAddress.value=db.settings.address;setWeekdayHours.value=db.settings.weekdayHours||'Monday to Friday, 8:00 AM – 5:00 PM';setSaturdayHours.value=db.settings.saturdayHours||'Saturday, 8:00 AM – 1:00 PM';setRestDay.value=db.settings.restDay||'Sunday';setPublicHoliday.value=db.settings.publicHoliday||'Malaysia gazetted public holidays applicable in Sabah';setProbation.value=db.settings.probation||'3 months';setNotice.value=db.settings.notice||'1 month';setSalaryPayment.value=db.settings.salaryPayment||'On or before the 7th day of the following month';setOutstationRate.value=db.settings.outstationRate||70; if(document.getElementById('setEmployerEpf'))setEmployerEpf.value=db.settings.employerEpf||'Pending Registration'; if(document.getElementById('setEmployerSocso'))setEmployerSocso.value=db.settings.employerSocso||'Pending Registration'; if(document.getElementById('setEmployerTax'))setEmployerTax.value=db.settings.employerTax||''}
-let backupCompletedThisSession=false;
-let backupDirty=localStorage.getItem('gmeHRMSBackupDirty')==='1';
-function markBackupDirty(){
- backupDirty=true;
- localStorage.setItem('gmeHRMSBackupDirty','1');
- updateDashboardBackupStatus();
+function formulaValue(col,type){
+  const values=current.rows.map(r=>parseNumber(r[col])).filter(v=>v!==null);
+  if(type==="SUM")return values.reduce((a,b)=>a+b,0);
+  if(type==="AVERAGE")return values.length?values.reduce((a,b)=>a+b,0)/values.length:0;
+  if(type==="MIN")return values.length?Math.min(...values):0;
+  if(type==="MAX")return values.length?Math.max(...values):0;
+  if(type==="COUNT")return values.length;
+  return "";
 }
-function getBackupHistory(){
- try{return JSON.parse(localStorage.getItem('gmeHRMSBackupHistory')||'[]')}catch(e){return []}
-}
-function saveBackupHistory(history){localStorage.setItem('gmeHRMSBackupHistory',JSON.stringify(history.slice(0,10)))}
-function formatBytes(bytes){
- if(bytes<1024)return bytes+' B';
- if(bytes<1024*1024)return (bytes/1024).toFixed(1)+' KB';
- return (bytes/1024/1024).toFixed(2)+' MB';
-}
-function databaseSize(){return new Blob([JSON.stringify(db)]).size}
-function backupAgeDays(){
- const last=localStorage.getItem('gmeHRMSLastBackup');
- if(!last)return Infinity;
- return Math.floor((Date.now()-new Date(last).getTime())/86400000);
-}
-function updateDashboardBackupStatus(){
- const el=document.getElementById('dashboardBackupStatus'); if(!el)return;
- const last=localStorage.getItem('gmeHRMSLastBackup');
- const age=backupAgeDays();
- if(!last){el.className='backup-status warn';el.textContent='Backup recommended: no JSON backup has been recorded yet.';return}
- if(backupDirty){el.className='backup-status warn';el.textContent='Backup recommended: records have changed since the last JSON backup ('+new Date(last).toLocaleString('en-MY')+').';return}
- if(age>=7){el.className='backup-status warn';el.textContent='Backup recommended: the last JSON backup is '+age+' days old.';return}
- el.className='backup-status good';el.textContent='Backup up to date. Last exported: '+new Date(last).toLocaleString('en-MY')+'.';
-}
-function exportBackup(){
- try{
-  const now=new Date();
-  let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
-  let a=document.createElement('a');
-  const url=URL.createObjectURL(blob);
-  a.href=url;
-  a.download='GME_HRMS_Professional_v4.2_Backup_'+now.toISOString().replace(/[:.]/g,'-')+'.json';
-  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
-  const stamp=now.toISOString();
-  localStorage.setItem('gmeHRMSLastBackup',stamp);
-  backupCompletedThisSession=true;backupDirty=false;localStorage.setItem('gmeHRMSBackupDirty','0');
-  const history=getBackupHistory();history.unshift({date:stamp,file:a.download,size:blob.size});saveBackupHistory(history);
-  updateDashboardBackupStatus();
-  return true;
- }catch(err){alert('Backup could not be exported. Please try again.');return false}
-}
-function renderBackupManager(){
- const last=localStorage.getItem('gmeHRMSLastBackup');
- const age=backupAgeDays();
- const status=document.getElementById('backupManagerStatus');
- document.getElementById('bmLastBackup').textContent=last?new Date(last).toLocaleString('en-MY'):'Never';
- document.getElementById('bmDirty').textContent=backupDirty?'Yes — backup recommended':'No';
- document.getElementById('bmDbSize').textContent=formatBytes(databaseSize());
- document.getElementById('bmVersion').textContent='v'+(db.version||'4.2');
- if(!last){status.className='backup-status warn';status.textContent='No JSON backup has been recorded. Please create your first backup now.'}
- else if(backupDirty){status.className='backup-status warn';status.textContent='Your records changed after the last backup. Create a fresh JSON backup before exiting.'}
- else if(age>=7){status.className='backup-status warn';status.textContent='Your last backup is '+age+' days old. A fresh backup is recommended.'}
- else{status.className='backup-status good';status.textContent='Your latest saved records are covered by the JSON backup.'}
- const h=getBackupHistory();
- document.getElementById('backupHistoryTable').innerHTML='<tr><th>Date & Time</th><th>File</th><th>Size</th></tr>'+(h.length?h.map(x=>`<tr><td>${new Date(x.date).toLocaleString('en-MY')}</td><td>${x.file||''}</td><td>${formatBytes(Number(x.size||0))}</td></tr>`).join(''):'<tr><td colspan="3">No backup history yet.</td></tr>');
-}
-function openBackupManager(){renderBackupManager();document.getElementById('backupManagerModal').classList.add('open')}
-function closeBackupManager(){document.getElementById('backupManagerModal').classList.remove('open')}
-function backupNowFromManager(){if(exportBackup()){renderBackupManager();alert('JSON backup exported successfully.')}}
-function safeExitFromManager(){
- if(backupDirty||!localStorage.getItem('gmeHRMSLastBackup')){
-  if(!confirm('A fresh backup is recommended. Exit without creating a new JSON backup?'))return;
- }
- closeBackupManager();
- window.close();
- setTimeout(()=>alert('Your browser may block automatic closing. You can now close this tab safely.'),250);
-}
-function importBackup(e){
- let f=e.target.files[0];if(!f)return;
- let r=new FileReader();
- r.onload=()=>{
-  try{
-   const imported=JSON.parse(r.result);
-   if(!imported||!Array.isArray(imported.employees))throw new Error('Invalid backup format');
-   db=imported;migrateDB();localStorage.setItem('gmeHRMSv2',JSON.stringify(db));
-   backupDirty=false;localStorage.setItem('gmeHRMSBackupDirty','0');
-   loadSettings();refreshAll();updateDashboardBackupStatus();
-   if(document.getElementById('backupManagerModal').classList.contains('open'))renderBackupManager();
-   alert('Backup restored successfully.');
-  }catch(err){alert('This file is not a valid GME HRMS JSON backup.');}
-  e.target.value='';
- };
- r.readAsText(f);
+function refreshFormulaSelector(){
+  const sel=$("formulaColumn"),old=sel.value;
+  sel.innerHTML="";
+  current.headers.forEach((h,i)=>{
+    const o=document.createElement("option");
+    o.value=i;o.textContent=h;sel.appendChild(o);
+  });
+  if([...sel.options].some(o=>o.value===old))sel.value=old;
 }
 
-let deferredInstallPrompt=null;
-function isIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent)}
-function isStandalone(){return window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}
-function updatePWAState(){
- const s=document.getElementById('pwaState'); if(s)s.textContent=isStandalone()?'Installed':(navigator.onLine?'Online':'Offline');
- const banner=document.getElementById('offlineBanner'); if(banner)banner.classList.toggle('show',!navigator.onLine);
- const ios=document.getElementById('iosInstallHelp');
- if(ios)ios.classList.toggle('hidden',!(isIOS()&&!isStandalone()));
+function renderTable(){
+  const hr=$("headerRow");hr.innerHTML='<th class="rowno">#</th>';
+  current.headers.forEach((h,ci)=>{
+    const th=document.createElement("th");
+    th.contentEditable=true;th.textContent=h;
+    th.addEventListener("input",()=>{current.headers[ci]=th.textContent.trim()||`Column ${ci+1}`;refreshFormulaSelector();queueAutosave()});
+    hr.appendChild(th);
+  });
+  const body=$("sheetBody");body.innerHTML="";
+  current.rows.forEach((row,ri)=>{
+    while(row.length<current.headers.length)row.push("");
+    if(row.length>current.headers.length)row.length=current.headers.length;
+    const tr=document.createElement("tr");
+    const no=document.createElement("td");no.className="rowno";no.textContent=ri+1;tr.appendChild(no);
+    row.forEach((v,ci)=>{
+      const td=document.createElement("td");
+      td.contentEditable=true;td.textContent=v;
+      td.dataset.row=ri;td.dataset.col=ci;
+      td.addEventListener("input",()=>{current.rows[ri][ci]=td.textContent;updateFormulaCells();queueAutosave()});
+      td.addEventListener("paste",handlePaste);
+      tr.appendChild(td);
+    });
+    body.appendChild(tr);
+  });
+  const fr=document.createElement("tr");fr.className="total-row";
+  const label=document.createElement("td");label.className="rowno";label.textContent="ƒ";fr.appendChild(label);
+  current.headers.forEach((_,ci)=>{
+    const td=document.createElement("td");td.dataset.formulaCol=ci;
+    const f=current.formulas.find(x=>x.col===ci);
+    if(f){td.className="sum-cell";td.textContent=`${f.type}: ${formatNumber(formulaValue(ci,f.type))}`}
+    fr.appendChild(td);
+  });
+  body.appendChild(fr);
+  refreshFormulaSelector();
 }
-function toggleMobileMenu(){document.querySelector('.sidebar')?.classList.toggle('open')}
-document.addEventListener('click',e=>{
- const sidebar=document.querySelector('.sidebar');
- if(window.innerWidth<=800&&sidebar?.classList.contains('open')&&!sidebar.contains(e.target)&&!e.target.closest('.menu-toggle'))sidebar.classList.remove('open');
- if(window.innerWidth<=800&&e.target.closest('.nav button'))sidebar?.classList.remove('open');
-});
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;document.getElementById('installAppBtn')?.classList.remove('hidden')});
-window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;document.getElementById('installAppBtn')?.classList.add('hidden');updatePWAState()});
-async function installPWA(){
- if(!deferredInstallPrompt){if(isIOS())document.getElementById('iosInstallHelp')?.classList.remove('hidden');else alert('Use your browser menu and choose Install app or Add to Home screen.');return}
- deferredInstallPrompt.prompt(); await deferredInstallPrompt.userChoice; deferredInstallPrompt=null;document.getElementById('installAppBtn')?.classList.add('hidden');
+function formatNumber(n){return typeof n==="number"?n.toLocaleString(undefined,{maximumFractionDigits:2}):n}
+function updateFormulaCells(){
+  current.formulas.forEach(f=>{
+    const c=document.querySelector(`[data-formula-col="${f.col}"]`);
+    if(c)c.textContent=`${f.type}: ${formatNumber(formulaValue(f.col,f.type))}`;
+  });
 }
-window.addEventListener('online',updatePWAState);window.addEventListener('offline',updatePWAState);
-if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
- window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(err=>console.warn('Service worker registration failed',err)));
+function handlePaste(e){
+  const text=e.clipboardData.getData("text");
+  if(!text.includes("\t")&&!text.includes("\n"))return;
+  e.preventDefault();
+  const startR=Number(e.currentTarget.dataset.row),startC=Number(e.currentTarget.dataset.col);
+  const matrix=text.replace(/\r/g,"").split("\n").filter((x,i,a)=>!(i===a.length-1&&x==="")).map(r=>r.split("\t"));
+  const neededRows=startR+matrix.length-current.rows.length;
+  const neededCols=startC+Math.max(...matrix.map(r=>r.length))-current.headers.length;
+  if(neededRows>0)for(let i=0;i<neededRows;i++)current.rows.push(Array(current.headers.length).fill(""));
+  if(neededCols>0){
+    const s=current.headers.length;
+    for(let i=0;i<neededCols;i++)current.headers.push(`Column ${s+i+1}`);
+    current.rows.forEach(r=>{while(r.length<current.headers.length)r.push("")});
+  }
+  matrix.forEach((r,ri)=>r.forEach((v,ci)=>current.rows[startR+ri][startC+ci]=v));
+  renderTable();queueAutosave();
+}
+
+function addRows(n){
+  n=Math.max(1,Math.min(500,Number(n)||1));
+  for(let i=0;i<n;i++)current.rows.push(Array(current.headers.length).fill(""));
+  renderTable();queueAutosave();
+}
+function addCols(n){
+  n=Math.max(1,Math.min(50,Number(n)||1));const s=current.headers.length;
+  for(let i=0;i<n;i++)current.headers.push(`Column ${s+i+1}`);
+  current.rows.forEach(r=>{for(let i=0;i<n;i++)r.push("")});
+  renderTable();queueAutosave();
+}
+function deleteLastRow(){
+  if(current.rows.length<=1)return alert("At least one row must remain.");
+  current.rows.pop();renderTable();queueAutosave();
+}
+function deleteLastCol(){
+  if(current.headers.length<=1)return alert("At least one column must remain.");
+  const removed=current.headers.length-1;
+  current.headers.pop();current.rows.forEach(r=>r.pop());
+  current.formulas=current.formulas.filter(f=>f.col!==removed);
+  renderTable();queueAutosave();
+}
+function toggleFormula(){
+  const col=Number($("formulaColumn").value),type=$("formulaType").value;
+  const existing=current.formulas.findIndex(f=>f.col===col&&f.type===type);
+  if(existing>=0)current.formulas.splice(existing,1);
+  else{
+    current.formulas=current.formulas.filter(f=>f.col!==col);
+    current.formulas.push({col,type});
+  }
+  renderTable();queueAutosave();
+}
+
+async function saveCurrent(show=true){
+  if(!current)return;
+  syncMetaToCurrent();
+  await dbPut(current);
+  $("saveStatus").textContent="Saved "+new Date().toLocaleString();
+  if(show){
+    $("saveNotice").style.display="block";
+    setTimeout(()=>$("saveNotice").style.display="none",1800);
+  }
+}
+function queueAutosave(){
+  syncMetaToCurrent();
+  $("saveStatus").textContent="Unsaved changes...";
+  clearTimeout(autosaveTimer);
+  autosaveTimer=setTimeout(()=>saveCurrent(false),10000);
+}
+
+async function loadDashboard(){
+  let items=await dbAll();
+  const q=$("searchWorksheets").value.trim().toLowerCase();
+  if(q){
+    items=items.filter(w=>JSON.stringify({
+      title:w.title,company:w.company,remarks:w.remarks,headers:w.headers,rows:w.rows,status:w.status
+    }).toLowerCase().includes(q));
+  }
+  const sort=$("sortWorksheets").value;
+  items.sort((a,b)=>{
+    if(sort==="title")return (a.title||"").localeCompare(b.title||"");
+    if(sort==="company")return (a.company||"").localeCompare(b.company||"");
+    if(sort==="date")return (b.date||"").localeCompare(a.date||"");
+    return (b.modifiedAt||"").localeCompare(a.modifiedAt||"");
+  });
+  const wrap=$("worksheetCards");wrap.innerHTML="";
+  if(!items.length){wrap.innerHTML='<div class="empty">No worksheets found.</div>';return}
+  items.forEach(w=>{
+    const card=document.createElement("div");card.className="card";
+    card.innerHTML=`<h3></h3><div class="card-meta"></div><div class="card-actions"></div>`;
+    card.querySelector("h3").textContent=w.title||"Untitled Worksheet";
+    card.querySelector(".card-meta").innerHTML=
+      `Company: ${escapeHtml(w.company||"-")}<br>Date: ${escapeHtml(w.date||"-")}<br>Status: ${escapeHtml(w.status||"-")}<br>Modified: ${new Date(w.modifiedAt).toLocaleString()}`;
+    const a=card.querySelector(".card-actions");
+    const open=btn("Open","primary",async()=>openWorksheet(w.id));
+    const dup=btn("Duplicate","",async()=>{const c=structuredClone(w);c.id=uuid();c.title=(c.title||"Worksheet")+" Copy";c.createdAt=c.modifiedAt=new Date().toISOString();await dbPut(c);loadDashboard()});
+    const del=btn("Delete","danger",async()=>{if(confirm("Delete this worksheet?")){await dbDelete(w.id);loadDashboard()}});
+    a.append(open,dup,del);wrap.appendChild(card);
+  });
+}
+function btn(text,cls,fn){const b=document.createElement("button");b.textContent=text;if(cls)b.className=cls;b.onclick=fn;return b}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+
+async function openWorksheet(id){
+  current=await dbGet(id);if(!current)return;
+  if(!Array.isArray(current.formulas))current.formulas=[];
+  if(!Array.isArray(current.attachments))current.attachments=[];
+  renderMeta();renderTable();renderAttachments();showEditor();
+  $("saveStatus").textContent="Opened "+new Date().toLocaleString();
+}
+async function createWorksheet(){
+  current=blankWorksheet();await dbPut(current);renderMeta();renderTable();renderAttachments();showEditor();
+}
+async function saveAsCopy(){
+  syncMetaToCurrent();
+  const c=structuredClone(current);c.id=uuid();c.title=(c.title||"Worksheet")+" Copy";c.createdAt=c.modifiedAt=new Date().toISOString();
+  current=c;await dbPut(current);renderMeta();renderTable();renderAttachments();saveCurrent(true);
+}
+
+function formatBytes(b){
+  if(!b)return "0 Bytes";const k=1024,u=["Bytes","KB","MB","GB"],i=Math.floor(Math.log(b)/Math.log(k));
+  return (b/Math.pow(k,i)).toFixed(i?1:0)+" "+u[i];
+}
+function renderAttachments(){
+  const list=$("attachmentList");list.innerHTML="";
+  if(!current.attachments.length){list.innerHTML='<div class="empty">No attachments uploaded.</div>';return}
+  current.attachments.forEach((a,i)=>{
+    const item=document.createElement("div");item.className="attachment-item";
+    const info=document.createElement("div");
+    info.innerHTML=`<div class="attachment-name"></div><div class="attachment-meta">${formatBytes(a.size)} • ${new Date(a.addedAt).toLocaleString()}</div>`;
+    info.querySelector(".attachment-name").textContent=a.name;
+    const acts=document.createElement("div");acts.className="actions";
+    acts.append(
+      btn("Download","",()=>{const l=document.createElement("a");l.href=a.data;l.download=a.name;l.click()}),
+      btn("Remove","danger",()=>{if(confirm("Remove this attachment?")){current.attachments.splice(i,1);renderAttachments();queueAutosave()}})
+    );
+    item.append(info,acts);list.appendChild(item);
+  });
+}
+function addAttachments(files){
+  [...files].forEach(file=>{
+    if(file.size>10*1024*1024){alert(file.name+" is larger than 10 MB.");return}
+    const r=new FileReader();
+    r.onload=()=>{current.attachments.push({id:uuid(),name:file.name,type:file.type,size:file.size,addedAt:new Date().toISOString(),data:r.result});renderAttachments();queueAutosave()};
+    r.readAsDataURL(file);
+  });
 }
 
 
-function revealPreview(id){
- const el=document.getElementById(id); if(!el)return;
- el.classList.add('preview-open');
- let bar=el.previousElementSibling;
- if(!bar || !bar.classList.contains('preview-toolbar')){
-   bar=document.createElement('div');bar.className='preview-toolbar show no-print';
-   bar.innerHTML='<b style="flex:1;min-width:160px">Document preview ready</b><button class="btn secondary" type="button" onclick="hidePreview(\''+id+'\')">Hide Preview</button>';
-   el.parentNode.insertBefore(bar,el);
- } else bar.classList.add('show');
- if(window.innerWidth<=800)setTimeout(()=>bar.scrollIntoView({behavior:'smooth',block:'start'}),80);
+function importExcelFile(file){
+  const reader = new FileReader();
+
+  reader.onload = async function(e){
+    try{
+      const wb = XLSX.read(e.target.result,{type:"array"});
+      const firstSheet = wb.SheetNames[0];
+      const ws = wb.Sheets[firstSheet];
+      const data = XLSX.utils.sheet_to_json(ws,{header:1,defval:""});
+
+      if(!data.length){
+        alert("Excel file is empty.");
+        return;
+      }
+
+      current = blankWorksheet();
+      current.title = file.name.replace(/\.(xlsx|xls)$/i,"");
+      current.headers = data[0].map((x,i)=>String(x || "Column "+(i+1)));
+
+      current.rows = data.slice(1).map(row=>{
+        let r=[...row];
+        while(r.length < current.headers.length) r.push("");
+        return r.slice(0,current.headers.length);
+      });
+
+      current.modifiedAt = new Date().toISOString();
+
+      await dbPut(current);
+      renderMeta();
+      renderTable();
+      renderAttachments();
+      showEditor();
+
+      alert("Excel imported successfully.");
+    }catch(err){
+      alert("Unable to import Excel file.");
+      console.error(err);
+    }
+  };
+
+  reader.readAsArrayBuffer(file);
 }
-function hidePreview(id){const el=document.getElementById(id);if(el)el.classList.remove('preview-open');const bar=el?.previousElementSibling;if(bar?.classList.contains('preview-toolbar'))bar.classList.remove('show')}
-['generatePayslip','generateAdvanceForm','generateLeaveForm','generateContract','generateOutstationForm','generateExceptionForm','generateAssetForm','generateVehicleForm','generateClaimForm'].forEach(name=>{
- const original=window[name];if(typeof original==='function')window[name]=function(...args){const result=original.apply(this,args);const map={generatePayslip:'payslipPrint',generateAdvanceForm:'advancePrint',generateLeaveForm:'leavePrint',generateContract:'contractPrint',generateOutstationForm:'outstationPrint',generateExceptionForm:'exceptionPrint',generateAssetForm:'assetPrint',generateVehicleForm:'vehiclePrint',generateClaimForm:'claimPrint'};revealPreview(map[name]);return result}
-});
-function updateGreeting(){const h=new Date().getHours();const word=h<12?'Good morning':h<18?'Good afternoon':'Good evening';const el=document.getElementById('welcomeGreeting');if(el)el.textContent=word+' — GME HRMS';}
 
-window.onload=()=>{updateGreeting();updatePWAState();payDate.value=today();payMonth.value=monthNow();advRequestDate.value=today();leaveApplyDate.value=today(); if(document.getElementById('outStart')){outStart.value=today();outEnd.value=today();outRate.value=db.settings.outstationRate||70;calcOutstation();}contractStartDate.value=today(); if(document.getElementById('exDate'))exDate.value=today(); if(document.getElementById('assetIssueDate'))assetIssueDate.value=today(); if(document.getElementById('vehDate'))vehDate.value=today(); if(document.getElementById('claimDate'))newClaim(); if(document.getElementById('coExpDate')){newCompanyExpense();if(document.getElementById('coExpFilterMonth'))document.getElementById('coExpFilterMonth').value=monthNow();refreshCompanyExpenseRegister();} if(document.getElementById('payClaimsReimbursement')){loadPayrollClaims();loadPayrollAdvance();} newAdvance();newEmployee();loadSettings();refreshAll();updateDashboardBackupStatus()}
+function exportExcel(){
+  syncMetaToCurrent();
+  if(typeof XLSX==="undefined")return alert("Excel library did not load. Check your internet connection.");
+  const data=[
+    [current.title||""],
+    ["Company",current.company||""],
+    ["Date",current.date||""],
+    ["Status",current.status||""],
+    ["Prepared By",current.preparedBy||""],
+    ["Department",current.department||""],
+    ["Remarks",current.remarks||""],
+    [],
+    ["#",...current.headers]
+  ];
+  current.rows.forEach((r,i)=>data.push([i+1,...r]));
+  const totals=["FORMULA"];
+  current.headers.forEach((_,ci)=>{
+    const f=current.formulas.find(x=>x.col===ci);
+    totals.push(f?`${f.type}: ${formulaValue(ci,f.type)}`:"");
+  });
+  data.push(totals);
+  const ws=XLSX.utils.aoa_to_sheet(data);
+  ws["!cols"]=[{wch:7},...current.headers.map((h,ci)=>({wch:Math.min(Math.max(String(h).length,...current.rows.map(r=>String(r[ci]??"").length),12)+2,40)}))];
+  ws["!merges"]=[{s:{r:0,c:0},e:{r:0,c:Math.max(1,current.headers.length)}}];
+  const wb=XLSX.utils.book_new();
 
-/* ===== v4.4 Record Attachments & Editable Registers ===== */
-let selectedLeaveId='',selectedOutstationId='',selectedExceptionId='';
-function nextModuleId(prefix,arr){let max=0;(arr||[]).forEach(x=>{let m=String(x.id||'').match(/(\d+)$/);if(m)max=Math.max(max,+m[1])});return prefix+String(max+1).padStart(4,'0')}
-async function collectNewAttachments(inputId,existing=[]){const input=document.getElementById(inputId);const files=[...(input?.files||[])];const tooLarge=files.filter(f=>f.size>2*1024*1024);if(tooLarge.length)alert('Skipped files above 2 MB: '+tooLarge.map(f=>f.name).join(', '));const result=[...(existing||[])];for(const f of files.filter(f=>f.size<=2*1024*1024)){try{result.push(await fileToDataURL(f))}catch(e){alert(e.message)}}if(input)input.value='';return result}
-function renderModuleAttachments(tableId,files,openFn,delFn){const t=document.getElementById(tableId);if(!t)return;t.innerHTML='<tr><th>File</th><th>Size</th><th>Action</th></tr>'+((files||[]).map((f,i)=>`<tr><td>${escapeHtml(f.name||'Attachment')}</td><td>${Math.ceil(Number(f.size||0)/1024)} KB</td><td><button class="btn secondary" onclick="${openFn}(${i})">Open</button><button class="btn red" onclick="${delFn}(${i})">Delete</button></td></tr>`).join('')||'<tr><td colspan="3" class="note">No saved attachments.</td></tr>')}
-function openDataAttachment(f){if(!f?.data)return alert('Attachment not found.');let a=document.createElement('a');a.href=f.data;a.download=f.name||'attachment';a.target='_blank';a.click()}
-function safeSaveWithFiles(message){try{saveDB();alert(message);return true}catch(e){alert('Unable to save because browser storage is full. Export a JSON backup and remove some large attachments, then try again.');return false}}
+  // Excel worksheet tab names are limited to 31 characters and
+  // cannot contain: \\ / ? * [ ]
+  const tabName=(current.title||"Worksheet")
+    .replace(/[\\\/\?\*\[\]:]/g," ")
+    .replace(/\s+/g," ")
+    .trim()
+    .slice(0,31) || "Worksheet";
 
-function newLeaveRecord(){selectedLeaveId='';leaveEmployee.value='';leaveApplyDate.value=today();leaveStart.value='';leaveEnd.value='';leaveDays.value='';leaveBalance.value=8;leaveStatus.value='Pending Approval';leaveApprovedBy.value='';leaveReason.value='';document.querySelector('input[name="leaveType"][value="Annual Leave"]').checked=true;if(leaveAttachments)leaveAttachments.value='';renderModuleAttachments('leaveAttachmentTable',[],'openLeaveAttachment','deleteLeaveAttachment')}
-async function saveLeave(){if(!leaveEmployee.value)return alert('Please select employee.');let existing=(db.leaves||[]).find(x=>x.id===selectedLeaveId);let attachments=await collectNewAttachments('leaveAttachments',existing?.attachments||[]);let r={id:selectedLeaveId||nextModuleId('LEV-',db.leaves),employee:leaveEmployee.value,applyDate:leaveApplyDate.value,type:leaveType(),start:leaveStart.value,end:leaveEnd.value,days:num('leaveDays'),balance:num('leaveBalance'),status:leaveStatus.value,approvedBy:leaveApprovedBy.value,reason:leaveReason.value,attachments,updatedAt:new Date().toISOString()};let i=db.leaves.findIndex(x=>x.id===r.id);i>=0?db.leaves[i]=r:db.leaves.push(r);selectedLeaveId=r.id;if(safeSaveWithFiles('Leave record saved.')){refreshLeaveRegister();renderModuleAttachments('leaveAttachmentTable',r.attachments,'openLeaveAttachment','deleteLeaveAttachment')}}
-function editLeave(id){let r=db.leaves.find(x=>x.id===id);if(!r)return;selectedLeaveId=id;leaveEmployee.value=r.employee||'';leaveApplyDate.value=r.applyDate||'';leaveStart.value=r.start||'';leaveEnd.value=r.end||'';leaveDays.value=r.days||'';leaveBalance.value=r.balance??8;leaveStatus.value=r.status||'Pending Approval';leaveApprovedBy.value=r.approvedBy||'';leaveReason.value=r.reason||'';let radio=document.querySelector(`input[name="leaveType"][value="${CSS.escape(r.type||'Annual Leave')}"]`);if(radio)radio.checked=true;renderModuleAttachments('leaveAttachmentTable',r.attachments||[],'openLeaveAttachment','deleteLeaveAttachment');showPage('leave');scrollTo({top:0,behavior:'smooth'})}
-function openLeaveAttachment(i){openDataAttachment(db.leaves.find(x=>x.id===selectedLeaveId)?.attachments?.[i])}
-function deleteLeaveAttachment(i){let r=db.leaves.find(x=>x.id===selectedLeaveId);if(r?.attachments?.[i]&&confirm('Delete this attachment?')){r.attachments.splice(i,1);saveDB();renderModuleAttachments('leaveAttachmentTable',r.attachments,'openLeaveAttachment','deleteLeaveAttachment');refreshLeaveRegister()}}
-function deleteLeaveRecord(id){if(confirm('Delete this leave record and its attachments?')){db.leaves=db.leaves.filter(x=>x.id!==id);saveDB();newLeaveRecord();refreshLeaveRegister()}}
-function refreshLeaveRegister(){let t=document.getElementById('leaveRegisterTable');if(!t)return;let q=(leaveSearch?.value||'').toLowerCase(),st=leaveFilterStatus?.value||'';let rows=(db.leaves||[]).filter(r=>(!st||r.status===st)&&(!q||[r.id,emp(r.employee).name,r.employee,r.type,r.reason,r.approvedBy,(r.attachments||[]).map(f=>f.name).join(' ')].join(' ').toLowerCase().includes(q)));t.innerHTML='<tr><th>ID</th><th>Employee</th><th>Type</th><th>Dates</th><th>Days</th><th>Files</th><th>Status</th><th>Action</th></tr>'+rows.map(r=>`<tr><td>${r.id||''}</td><td>${emp(r.employee).name||r.employee}</td><td>${r.type||''}</td><td>${r.start||''} – ${r.end||''}</td><td>${r.days||0}</td><td>${(r.attachments||[]).length}</td><td>${r.status||''}</td><td><button class="btn secondary" onclick="editLeave('${r.id}')">Edit / Files</button><button class="btn red" onclick="deleteLeaveRecord('${r.id}')">Delete</button></td></tr>`).join('')}
+  XLSX.utils.book_append_sheet(wb,ws,tabName);
 
-function newOutstationRecord(){selectedOutstationId='';outEmployee.value='';outStart.value='';outEnd.value='';outDays.value=1;outRate.value=db.settings.outstationRate||70;outManualAmount.value='';outTotal.value='';outLocation.value='';outStatus.value='Pending Approval';outPurpose.value='';if(outAttachments)outAttachments.value='';renderModuleAttachments('outAttachmentTable',[],'openOutAttachment','deleteOutAttachment')}
-async function saveOutstation(){if(!outEmployee.value)return alert('Please select employee.');calcOutstation();let existing=(db.outstations||[]).find(x=>x.id===selectedOutstationId);let attachments=await collectNewAttachments('outAttachments',existing?.attachments||[]);let r={id:selectedOutstationId||nextModuleId('OUT-',db.outstations),employee:outEmployee.value,start:outStart.value,end:outEnd.value,days:Number(outDays.value||0),rate:Number(outRate.value||0),manual:outManualAmount.value,total:Number(outTotal.value||0),location:outLocation.value,purpose:outPurpose.value,status:outStatus.value,attachments,updatedAt:new Date().toISOString()};let i=db.outstations.findIndex(x=>x.id===r.id);i>=0?db.outstations[i]=r:db.outstations.push(r);selectedOutstationId=r.id;if(safeSaveWithFiles('Outstation record saved.')){refreshOutstationRegister();renderModuleAttachments('outAttachmentTable',r.attachments,'openOutAttachment','deleteOutAttachment')}}
-function editOutstation(id){let r=db.outstations.find(x=>x.id===id);if(!r)return;selectedOutstationId=id;outEmployee.value=r.employee||'';outStart.value=r.start||'';outEnd.value=r.end||'';outDays.value=r.days||1;outRate.value=r.rate||70;outManualAmount.value=r.manual??'';outTotal.value=Number(r.total||0).toFixed(2);outLocation.value=r.location||'';outStatus.value=r.status||'Pending Approval';outPurpose.value=r.purpose||'';renderModuleAttachments('outAttachmentTable',r.attachments||[],'openOutAttachment','deleteOutAttachment');showPage('outstation');scrollTo({top:0,behavior:'smooth'})}
-function openOutAttachment(i){openDataAttachment(db.outstations.find(x=>x.id===selectedOutstationId)?.attachments?.[i])}
-function deleteOutAttachment(i){let r=db.outstations.find(x=>x.id===selectedOutstationId);if(r?.attachments?.[i]&&confirm('Delete this attachment?')){r.attachments.splice(i,1);saveDB();renderModuleAttachments('outAttachmentTable',r.attachments,'openOutAttachment','deleteOutAttachment');refreshOutstationRegister()}}
-function deleteOutstationRecord(id){if(confirm('Delete this outstation record and its attachments?')){db.outstations=db.outstations.filter(x=>x.id!==id);saveDB();newOutstationRecord();refreshOutstationRegister()}}
-function refreshOutstationRegister(){let t=document.getElementById('outRegisterTable');if(!t)return;let q=(outSearch?.value||'').toLowerCase(),st=outFilterStatus?.value||'';let rows=(db.outstations||[]).filter(r=>(!st||r.status===st)&&(!q||[r.id,emp(r.employee).name,r.employee,r.location,r.purpose,(r.attachments||[]).map(f=>f.name).join(' ')].join(' ').toLowerCase().includes(q)));t.innerHTML='<tr><th>ID</th><th>Employee</th><th>Dates</th><th>Location</th><th>Total</th><th>Files</th><th>Status</th><th>Action</th></tr>'+rows.map(r=>`<tr><td>${r.id||''}</td><td>${emp(r.employee).name||r.employee}</td><td>${r.start||''} – ${r.end||''}</td><td>${r.location||''}</td><td>RM ${money(r.total)}</td><td>${(r.attachments||[]).length}</td><td>${r.status||''}</td><td><button class="btn secondary" onclick="editOutstation('${r.id}')">Edit / Files</button><button class="btn red" onclick="deleteOutstationRecord('${r.id}')">Delete</button></td></tr>`).join('')}
+  // Export filename format: Title_Company Name.xlsx
+  const titlePart=safeName(current.title||"Worksheet");
+  const companyPart=safeName(current.company||"Company");
+  XLSX.writeFile(wb,`${titlePart}_${companyPart}.xlsx`);
+}
+function exportCsv(){
+  const rows=[current.headers,...current.rows];
+  const csv=rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n");
+  downloadBlob(csv,"text/csv",`${safeName(current.title)}_${current.date}.csv`);
+}
+function exportJson(){
+  syncMetaToCurrent();
+  downloadBlob(JSON.stringify(current,null,2),"application/json",`${safeName(current.title)}_${current.date}.json`);
+}
+function downloadBlob(content,type,name){
+  const b=new Blob([content],{type}),u=URL.createObjectURL(b),a=document.createElement("a");
+  a.href=u;a.download=name;a.click();URL.revokeObjectURL(u);
+}
+function safeName(s){return (s||"worksheet").replace(/[\\/:*?"<>|]+/g,"_").slice(0,80)}
 
-function newExceptionRecord(){selectedExceptionId='';exEmployee.value='';exDate.value=today();exType.value='Absent';exImpact.value='No Deduction';exDeduction.value=0;exStatus.value='Pending Approval';exApprovedBy.value='';exReason.value='';if(exAttachments)exAttachments.value='';renderModuleAttachments('exAttachmentTable',[],'openExAttachment','deleteExAttachment')}
-async function saveException(){if(!exEmployee.value)return alert('Please select employee.');let existing=(db.exceptions||[]).find(x=>x.id===selectedExceptionId);let attachments=await collectNewAttachments('exAttachments',existing?.attachments||[]);let r={id:selectedExceptionId||nextModuleId('ATT-',db.exceptions),employee:exEmployee.value,date:exDate.value,type:exType.value,impact:exImpact.value,deduction:Number(exDeduction.value||0),status:exStatus.value,approvedBy:exApprovedBy.value,reason:exReason.value,attachments,updatedAt:new Date().toISOString()};let i=db.exceptions.findIndex(x=>x.id===r.id);i>=0?db.exceptions[i]=r:db.exceptions.push(r);selectedExceptionId=r.id;if(safeSaveWithFiles('Attendance exception saved.')){refreshExceptionRegister();renderModuleAttachments('exAttachmentTable',r.attachments,'openExAttachment','deleteExAttachment')}}
-function editException(id){let r=db.exceptions.find(x=>x.id===id);if(!r)return;selectedExceptionId=id;exEmployee.value=r.employee||'';exDate.value=r.date||'';exType.value=r.type||'Absent';exImpact.value=r.impact||'No Deduction';exDeduction.value=r.deduction||0;exStatus.value=r.status||'Pending Approval';exApprovedBy.value=r.approvedBy||'';exReason.value=r.reason||'';renderModuleAttachments('exAttachmentTable',r.attachments||[],'openExAttachment','deleteExAttachment');showPage('exception');scrollTo({top:0,behavior:'smooth'})}
-function openExAttachment(i){openDataAttachment(db.exceptions.find(x=>x.id===selectedExceptionId)?.attachments?.[i])}
-function deleteExAttachment(i){let r=db.exceptions.find(x=>x.id===selectedExceptionId);if(r?.attachments?.[i]&&confirm('Delete this attachment?')){r.attachments.splice(i,1);saveDB();renderModuleAttachments('exAttachmentTable',r.attachments,'openExAttachment','deleteExAttachment');refreshExceptionRegister()}}
-function deleteExceptionRecord(id){if(confirm('Delete this attendance exception and its attachments?')){db.exceptions=db.exceptions.filter(x=>x.id!==id);saveDB();newExceptionRecord();refreshExceptionRegister()}}
-function refreshExceptionRegister(){let t=document.getElementById('exRegisterTable');if(!t)return;let q=(exSearch?.value||'').toLowerCase(),st=exFilterStatus?.value||'';let rows=(db.exceptions||[]).filter(r=>(!st||r.status===st)&&(!q||[r.id,emp(r.employee).name,r.employee,r.type,r.reason,r.approvedBy,(r.attachments||[]).map(f=>f.name).join(' ')].join(' ').toLowerCase().includes(q)));t.innerHTML='<tr><th>ID</th><th>Employee</th><th>Date</th><th>Type</th><th>Impact</th><th>Files</th><th>Status</th><th>Action</th></tr>'+rows.map(r=>`<tr><td>${r.id||''}</td><td>${emp(r.employee).name||r.employee}</td><td>${r.date||''}</td><td>${r.type||''}</td><td>${r.impact||''}</td><td>${(r.attachments||[]).length}</td><td>${r.status||''}</td><td><button class="btn secondary" onclick="editException('${r.id}')">Edit / Files</button><button class="btn red" onclick="deleteExceptionRecord('${r.id}')">Delete</button></td></tr>`).join('')}
+function importJson(file){
+  const r=new FileReader();
+  r.onload=async()=>{
+    try{
+      const x=JSON.parse(r.result);
+      if(!x.headers||!x.rows)throw new Error();
+      x.id=uuid();x.createdAt=x.modifiedAt=new Date().toISOString();
+      if(!Array.isArray(x.formulas))x.formulas=[];
+      if(!Array.isArray(x.attachments))x.attachments=[];
+      current=x;await dbPut(current);renderMeta();renderTable();renderAttachments();showEditor();
+    }catch{alert("Invalid worksheet backup.")}
+  };
+  r.readAsText(file);
+}
 
-function currentClaim(){return (db.claims||[]).find(x=>x.no===claimNo.value)}
-function renderClaimAttachments(){let c=currentClaim();let files=[...(c?.attachments||[])];if(c?.receipt&&!files.some(f=>f.data===c.receipt.data))files.unshift({...c.receipt,size:c.receipt.size||0});renderModuleAttachments('claimAttachmentTable',files,'openClaimAttachment','deleteClaimAttachment')}
-async function saveClaim(){if(!claimEmployee.value)return alert('Please select claimant / employee.');if(num('claimAmount')<=0)return alert('Please enter claimed amount.');calcClaimVariance();let existing=currentClaim();let attachments=await collectNewAttachments('claimAttachments',existing?.attachments||[]);if(existing?.receipt&&!attachments.some(f=>f.data===existing.receipt.data))attachments.unshift(existing.receipt);let record={no:claimNo.value||nextClaimNo(),employee:claimEmployee.value,claimDate:claimDate.value,expenseDate:expenseDate.value,type:claimType.value,category:claimCategory.value,customer:claimCustomer.value,project:claimProject.value,paidBy:claimPaidBy.value,budget:num('claimBudget'),amount:num('claimAmount'),variance:num('claimVariance'),budgetStatus:claimBudgetStatus.value,status:claimStatus.value,approvedBy:claimApprovedBy.value,paymentDate:claimPaymentDate.value,reimburseMethod:claimReimburseMethod.value,description:claimDescription.value,activity:{name:activityName.value,date:activityDate.value,venue:activityVenue.value,organizer:activityOrganizer.value,participants:num('activityParticipants'),names:activityNames.value},attachments,receipt:attachments[0]||null,updatedAt:new Date().toISOString()};let i=db.claims.findIndex(c=>c.no===record.no);i>=0?db.claims[i]=record:db.claims.push(record);claimNo.value=record.no;if(safeSaveWithFiles('Expense claim saved.')){renderClaimAttachments();refreshClaimRegister()}}
-const _oldEditClaim=editClaim;editClaim=function(no){_oldEditClaim(no);renderClaimAttachments()}
-const _oldNewClaim=newClaim;newClaim=function(){_oldNewClaim();renderModuleAttachments('claimAttachmentTable',[],'openClaimAttachment','deleteClaimAttachment')}
-function openClaimAttachment(i){let c=currentClaim();let files=[...(c?.attachments||[])];if(c?.receipt&&!files.some(f=>f.data===c.receipt.data))files.unshift(c.receipt);openDataAttachment(files[i])}
-function deleteClaimAttachment(i){let c=currentClaim();if(!c)return;let files=c.attachments||[];if(c.receipt&&!files.some(f=>f.data===c.receipt.data))files.unshift(c.receipt);if(files[i]&&confirm('Delete this attachment?')){let target=files[i];c.attachments=(c.attachments||[]).filter(f=>f.data!==target.data);if(c.receipt?.data===target.data)c.receipt=null;saveDB();renderClaimAttachments();refreshClaimRegister()}}
-function refreshClaimRegister(){let t=document.getElementById('claimRegisterTable');if(!t)return;t.innerHTML='<tr><th>Claim No.</th><th>Employee</th><th>Date</th><th>Type</th><th>Description</th><th>Actual</th><th>Files</th><th>Status</th><th>Action</th></tr>'+(db.claims||[]).map(c=>`<tr><td>${c.no||''}</td><td>${emp(c.employee).name||c.employee||''}</td><td>${c.expenseDate||''}</td><td>${c.type||''}</td><td>${c.category||c.description||''}</td><td>RM ${money(c.amount)}</td><td>${(c.attachments||[]).length||(c.receipt?1:0)}</td><td>${c.status||''}</td><td><button class="btn secondary" onclick="editClaim('${c.no}')">Edit / Files</button><button class="btn red" onclick="deleteClaim('${c.no}')">Delete</button></td></tr>`).join('')}
+["docTitle","company","docDate","docStatus","preparedBy","department","remarks"].forEach(id=>$(id).addEventListener("input",queueAutosave));
+$("newWorksheetBtn").onclick=createWorksheet;
+$("backBtn").onclick=async()=>{await saveCurrent(false);showDashboard()};
+$("saveBtn").onclick=()=>saveCurrent(true);
+$("saveAsBtn").onclick=saveAsCopy;
+$("addRowsBtn").onclick=()=>addRows($("rowsToAdd").value);
+$("addColsBtn").onclick=()=>addCols($("colsToAdd").value);
+$("deleteRowBtn").onclick=deleteLastRow;
+$("deleteColBtn").onclick=deleteLastCol;
+$("toggleFormulaBtn").onclick=toggleFormula;
+$("uploadAttachmentBtn").onclick=()=>$("attachmentFile").click();
+$("attachmentFile").onchange=e=>{addAttachments(e.target.files);e.target.value=""};
+$("exportExcelBtn").onclick=exportExcel;
+$("importExcelBtn").onclick=()=>document.getElementById("importExcelFile").click();
+$("importExcelFile").onchange=e=>{if(e.target.files[0])importExcelFile(e.target.files[0]);e.target.value="";};
+$("exportCsvBtn").onclick=exportCsv;
+$("exportPdfBtn").onclick=()=>{syncMetaToCurrent();document.title=current.title||"Worksheet";window.print()};
+$("exportJsonBtn").onclick=exportJson;
+$("importJsonBtn").onclick=()=>$("importJsonFile").click();
+$("importJsonFile").onchange=e=>{if(e.target.files[0])importJson(e.target.files[0]);e.target.value=""};
+$("searchWorksheets").oninput=loadDashboard;
+$("sortWorksheets").onchange=loadDashboard;
+$("themeSelect").onchange=e=>{document.documentElement.dataset.theme=e.target.value;localStorage.setItem("gme_theme",e.target.value)};
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;$("installBtn").classList.remove("hidden")});
+$("installBtn").onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;$("installBtn").classList.add("hidden")}};
 
-const _refreshAllV44=refreshAll;refreshAll=function(){_refreshAllV44();refreshLeaveRegister();refreshOutstationRegister();refreshExceptionRegister();refreshClaimRegister()}
-;(db.leaves||[]).forEach((r,i)=>{r.id=r.id||'LEV-'+String(i+1).padStart(4,'0');r.attachments=r.attachments||[]});
-;(db.outstations||[]).forEach((r,i)=>{r.id=r.id||'OUT-'+String(i+1).padStart(4,'0');r.attachments=r.attachments||[]});
-;(db.exceptions||[]).forEach((r,i)=>{r.id=r.id||'ATT-'+String(i+1).padStart(4,'0');r.attachments=r.attachments||[]});
-;(db.claims||[]).forEach(r=>{r.attachments=r.attachments||[];if(r.receipt&&!r.attachments.some(f=>f.data===r.receipt.data))r.attachments.push(r.receipt)});
-db.version='4.5';
-
-
-
-/* ===== v4.5 Multilingual UI: English (default), Bahasa Melayu, Chinese ===== */
-const GME_LANG_KEY='gmeHRMSLanguage';
-const GME_I18N={
- ms:{
- 'Menu':'Menu','Ready':'Sedia','Online':'Dalam talian','Offline':'Luar talian','Home':'Utama','Staff':'Kakitangan','Payroll':'Gaji','Claims':'Tuntutan','More':'Lagi',
- 'Dashboard':'Papan Pemuka','Employee Master':'Rekod Induk Pekerja','Employment Contract':'Kontrak Pekerjaan','Payroll & Payslip':'Gaji & Slip Gaji','Salary Advance':'Pendahuluan Gaji','Outstation Allowance':'Elaun Luar Stesen','Leave Application':'Permohonan Cuti','Attendance Exception':'Pengecualian Kehadiran','Asset Issue':'Pengeluaran Aset','Vehicle Assignment':'Penugasan Kenderaan','Expense Management':'Pengurusan Perbelanjaan','Company Account Expenses':'Perbelanjaan Akaun Syarikat','Blank Forms':'Borang Kosong','Reports':'Laporan','Settings':'Tetapan','Backup Manager':'Pengurus Sandaran',
- 'Active Employees':'Pekerja Aktif','Salary Advance Records':'Rekod Pendahuluan Gaji','Leave Records':'Rekod Cuti','Outstation Records':'Rekod Luar Stesen','Attendance Exceptions':'Pengecualian Kehadiran','Assets Issued':'Aset Dikeluarkan','Vehicle Assignments':'Penugasan Kenderaan','Pending Claims':'Tuntutan Belum Selesai','Claims This Month':'Tuntutan Bulan Ini','Staff Activities':'Aktiviti Kakitangan',
- 'Employee Name':'Nama Pekerja','Employee ID':'ID Pekerja','Status':'Status','IC No.':'No. IC','Position':'Jawatan','Department':'Jabatan','Bank / Account No.':'Bank / No. Akaun','EPF / KWSP No.':'No. EPF / KWSP','SOCSO / PERKESO No.':'No. SOCSO / PERKESO','Income Tax / LHDN No.':'No. Cukai Pendapatan / LHDN','Basic Salary':'Gaji Asas','Fixed Allowance':'Elaun Tetap','Annual Leave Entitlement':'Kelayakan Cuti Tahunan','Sick Leave Entitlement':'Kelayakan Cuti Sakit','New Employee':'Pekerja Baharu','Save Employee':'Simpan Pekerja','Delete Selected':'Padam Pilihan','Employee List':'Senarai Pekerja','Employee Document Vault':'Simpanan Dokumen Pekerja','Document Type':'Jenis Dokumen','Document File':'Fail Dokumen','Remarks':'Catatan','Add Document':'Tambah Dokumen','Open':'Buka','Delete':'Padam','Edit':'Edit','Edit / Files':'Edit / Fail',
- 'Select Employee':'Pilih Pekerja','Employment Start Date':'Tarikh Mula Kerja','Contract Type':'Jenis Kontrak','Probation Period':'Tempoh Percubaan','Working Hours':'Waktu Bekerja','Rest Day':'Hari Rehat','Annual Leave':'Cuti Tahunan','Notice Period':'Tempoh Notis','Work Location':'Lokasi Kerja','Additional Terms / Remarks':'Syarat Tambahan / Catatan','Generate Filled Contract':'Jana Kontrak Berisi','Generate Blank Contract':'Jana Kontrak Kosong','Print / Save PDF':'Cetak / Simpan PDF',
- 'Payroll Month':'Bulan Gaji','Payment Date':'Tarikh Bayaran','Outstation Allowance':'Elaun Luar Stesen','Commission / OT':'Komisen / OT','Bonus / Adjustment':'Bonus / Pelarasan','Salary Advance Deduction':'Potongan Pendahuluan Gaji','Other Deduction':'Potongan Lain','Approved Claims Reimbursement (Same Month)':'Bayaran Balik Tuntutan Diluluskan (Bulan Sama)','Claims Included':'Tuntutan Disertakan','Refresh Approved Claims':'Muat Semula Tuntutan Diluluskan','Generate Payslip':'Jana Slip Gaji','Mark Included Claims Paid':'Tanda Tuntutan Dibayar',
- 'Request Date':'Tarikh Permohonan','Requested Amount':'Jumlah Dimohon','Deduct From Month':'Tolak Dari Bulan','Monthly Deduction':'Potongan Bulanan','Case Type':'Jenis Kes','Approval Status':'Status Kelulusan','Approved By':'Diluluskan Oleh','Reason / Details':'Sebab / Butiran','Save Record':'Simpan Rekod','Generate Filled Form':'Jana Borang Berisi','Generate Blank Form':'Jana Borang Kosong','Supporting Attachments':'Lampiran Sokongan','Search Records':'Cari Rekod','Filter by Status':'Tapis mengikut Status','New Record':'Rekod Baharu',
- 'Outstation Start Date':'Tarikh Mula Luar Stesen','Outstation End Date':'Tarikh Tamat Luar Stesen','No. of Days':'Bil. Hari','Default Rate / Day (RM)':'Kadar Lalai / Hari (RM)','Manual Amount (Optional)':'Jumlah Manual (Pilihan)','Total Allowance (RM)':'Jumlah Elaun (RM)','Customer / Location':'Pelanggan / Lokasi','Purpose / Remarks':'Tujuan / Catatan','Save Outstation Record':'Simpan Rekod Luar Stesen',
- 'Application Date':'Tarikh Permohonan','Start Date':'Tarikh Mula','End Date':'Tarikh Tamat','Annual Leave Balance':'Baki Cuti Tahunan','Leave Type':'Jenis Cuti','Sick Leave':'Cuti Sakit','Emergency Leave':'Cuti Kecemasan','Unpaid Leave':'Cuti Tanpa Gaji','Compassionate Leave':'Cuti Ihsan','Others':'Lain-lain','Reason':'Sebab',
- 'Date':'Tarikh','Exception Type':'Jenis Pengecualian','Salary Impact':'Kesan Gaji','Deduction Amount (RM)':'Jumlah Potongan (RM)','Save Exception':'Simpan Pengecualian','Absent':'Tidak Hadir','Late':'Lewat','Half Day':'Separuh Hari','Early Leave':'Balik Awal','No Show':'Tidak Hadir Tanpa Maklum','Medical Leave / MC':'Cuti Sakit / MC','Work From Home':'Bekerja Dari Rumah','No Deduction':'Tiada Potongan','Half-day Deduction':'Potongan Separuh Hari','Full-day Deduction':'Potongan Sehari','Manual Deduction':'Potongan Manual',
- 'Claim No.':'No. Tuntutan','Claimant / Employee':'Penuntut / Pekerja','Claim Date':'Tarikh Tuntutan','Expense Date':'Tarikh Perbelanjaan','Expense Type':'Jenis Perbelanjaan','Category / Item':'Kategori / Item','Customer / Supplier (Optional)':'Pelanggan / Pembekal (Pilihan)','Project / Job (Optional)':'Projek / Kerja (Pilihan)','Payment Made By':'Bayaran Dibuat Dengan','Budget Amount (RM)':'Jumlah Bajet (RM)','Claimed / Actual Amount (RM)':'Jumlah Dituntut / Sebenar (RM)','Variance (RM)':'Perbezaan (RM)','Budget Status':'Status Bajet','Claim Status':'Status Tuntutan','Reimbursement Method':'Kaedah Bayaran Balik','Description / Business Purpose':'Penerangan / Tujuan Perniagaan','Receipt / Supporting Document':'Resit / Dokumen Sokongan','Receipt Remarks':'Catatan Resit','New Claim':'Tuntutan Baharu','Save Claim':'Simpan Tuntutan','Claims & Reimbursement Register':'Daftar Tuntutan & Bayaran Balik',
- 'Company Settings':'Tetapan Syarikat','Company Name':'Nama Syarikat','Company Registration No.':'No. Pendaftaran Syarikat','Telephone':'Telefon','Email':'E-mel','Address':'Alamat','Working Hours (Mon–Fri)':'Waktu Bekerja (Isn–Jum)','Working Hours (Saturday)':'Waktu Bekerja (Sabtu)','Public Holiday Policy':'Polisi Cuti Umum','Default Probation Period':'Tempoh Percubaan Lalai','Default Notice Period':'Tempoh Notis Lalai','Salary Payment Day':'Hari Bayaran Gaji','Outstation Allowance Rate':'Kadar Elaun Luar Stesen','Employer EPF No.':'No. EPF Majikan','Employer PERKESO No.':'No. PERKESO Majikan','Employer LHDN No.':'No. LHDN Majikan','Save Settings':'Simpan Tetapan',
- 'Pending Approval':'Menunggu Kelulusan','Approved':'Diluluskan','Rejected':'Ditolak','Paid':'Dibayar','Draft':'Draf','Submitted':'Dihantar','Closed':'Ditutup','Active':'Aktif','Resigned':'Berhenti','Permanent':'Tetap','Probation':'Percubaan','Part-Time':'Sambilan','Fixed Term':'Tempoh Tetap','Bank Transfer':'Pindahan Bank','Cash':'Tunai','Not Applicable':'Tidak Berkenaan','Search':'Cari','Action':'Tindakan','Files':'Fail','Amount':'Jumlah','Total':'Jumlah','Employee':'Pekerja','Type':'Jenis','Description':'Penerangan','Category':'Kategori','Supplier':'Pembekal','Reference':'Rujukan','Save':'Simpan','Cancel':'Batal','Close':'Tutup','Continue Working':'Teruskan Kerja','Backup Now':'Sandar Sekarang','Restore JSON':'Pulihkan JSON','Exit System':'Keluar Sistem','Language':'Bahasa'
- },
- zh:{
- 'Menu':'菜单','Ready':'就绪','Online':'在线','Offline':'离线','Home':'主页','Staff':'员工','Payroll':'薪资','Claims':'报销','More':'更多',
- 'Dashboard':'仪表板','Employee Master':'员工资料','Employment Contract':'雇佣合同','Payroll & Payslip':'薪资与工资单','Salary Advance':'预支薪资','Outstation Allowance':'外勤津贴','Leave Application':'请假申请','Attendance Exception':'考勤异常','Asset Issue':'资产发放','Vehicle Assignment':'车辆分配','Expense Management':'费用管理','Company Account Expenses':'公司账户支出','Blank Forms':'空白表格','Reports':'报表','Settings':'设置','Backup Manager':'备份管理',
- 'Active Employees':'在职员工','Salary Advance Records':'预支薪资记录','Leave Records':'请假记录','Outstation Records':'外勤记录','Attendance Exceptions':'考勤异常记录','Assets Issued':'已发放资产','Vehicle Assignments':'车辆分配记录','Pending Claims':'待处理报销','Claims This Month':'本月报销','Staff Activities':'员工活动',
- 'Employee Name':'员工姓名','Employee ID':'员工编号','Status':'状态','IC No.':'身份证号码','Position':'职位','Department':'部门','Bank / Account No.':'银行 / 账号','EPF / KWSP No.':'EPF / KWSP号码','SOCSO / PERKESO No.':'SOCSO / PERKESO号码','Income Tax / LHDN No.':'所得税 / LHDN号码','Basic Salary':'基本工资','Fixed Allowance':'固定津贴','Annual Leave Entitlement':'年假额度','Sick Leave Entitlement':'病假额度','New Employee':'新增员工','Save Employee':'保存员工','Delete Selected':'删除所选','Employee List':'员工列表','Employee Document Vault':'员工文件库','Document Type':'文件类型','Document File':'文件','Remarks':'备注','Add Document':'添加文件','Open':'打开','Delete':'删除','Edit':'编辑','Edit / Files':'编辑 / 文件',
- 'Select Employee':'选择员工','Employment Start Date':'入职日期','Contract Type':'合同类型','Probation Period':'试用期','Working Hours':'工作时间','Rest Day':'休息日','Annual Leave':'年假','Notice Period':'通知期','Work Location':'工作地点','Additional Terms / Remarks':'附加条款 / 备注','Generate Filled Contract':'生成已填写合同','Generate Blank Contract':'生成空白合同','Print / Save PDF':'打印 / 保存PDF',
- 'Payroll Month':'薪资月份','Payment Date':'付款日期','Commission / OT':'佣金 / 加班费','Bonus / Adjustment':'奖金 / 调整','Salary Advance Deduction':'预支薪资扣款','Other Deduction':'其他扣款','Approved Claims Reimbursement (Same Month)':'已批准报销（同月）','Claims Included':'包含的报销','Refresh Approved Claims':'刷新已批准报销','Generate Payslip':'生成工资单','Mark Included Claims Paid':'标记报销已支付',
- 'Request Date':'申请日期','Requested Amount':'申请金额','Deduct From Month':'扣款月份','Monthly Deduction':'每月扣款','Case Type':'个案类型','Approval Status':'审批状态','Approved By':'批准人','Reason / Details':'原因 / 详情','Save Record':'保存记录','Generate Filled Form':'生成已填写表格','Generate Blank Form':'生成空白表格','Supporting Attachments':'支持文件','Search Records':'搜索记录','Filter by Status':'按状态筛选','New Record':'新记录',
- 'Outstation Start Date':'外勤开始日期','Outstation End Date':'外勤结束日期','No. of Days':'天数','Default Rate / Day (RM)':'默认每日津贴（RM）','Manual Amount (Optional)':'手动金额（可选）','Total Allowance (RM)':'津贴总额（RM）','Customer / Location':'客户 / 地点','Purpose / Remarks':'用途 / 备注','Save Outstation Record':'保存外勤记录',
- 'Application Date':'申请日期','Start Date':'开始日期','End Date':'结束日期','Annual Leave Balance':'年假余额','Leave Type':'假期类型','Sick Leave':'病假','Emergency Leave':'紧急假','Unpaid Leave':'无薪假','Compassionate Leave':'恩恤假','Others':'其他','Reason':'原因',
- 'Date':'日期','Exception Type':'异常类型','Salary Impact':'薪资影响','Deduction Amount (RM)':'扣款金额（RM）','Save Exception':'保存异常','Absent':'缺勤','Late':'迟到','Half Day':'半天','Early Leave':'早退','No Show':'无故缺勤','Medical Leave / MC':'病假 / MC','Work From Home':'居家办公','No Deduction':'不扣款','Half-day Deduction':'扣半天','Full-day Deduction':'扣一天','Manual Deduction':'手动扣款',
- 'Claim No.':'报销编号','Claimant / Employee':'申请人 / 员工','Claim Date':'申请日期','Expense Date':'费用日期','Expense Type':'费用类型','Category / Item':'类别 / 项目','Customer / Supplier (Optional)':'客户 / 供应商（可选）','Project / Job (Optional)':'项目 / 工作（可选）','Payment Made By':'付款方式','Budget Amount (RM)':'预算金额（RM）','Claimed / Actual Amount (RM)':'报销 / 实际金额（RM）','Variance (RM)':'差额（RM）','Budget Status':'预算状态','Claim Status':'报销状态','Reimbursement Method':'报销方式','Description / Business Purpose':'说明 / 商业用途','Receipt / Supporting Document':'收据 / 支持文件','Receipt Remarks':'收据备注','New Claim':'新增报销','Save Claim':'保存报销','Claims & Reimbursement Register':'报销与付款记录',
- 'Company Settings':'公司设置','Company Name':'公司名称','Company Registration No.':'公司注册号','Telephone':'电话','Email':'电邮','Address':'地址','Working Hours (Mon–Fri)':'工作时间（周一至周五）','Working Hours (Saturday)':'工作时间（周六）','Public Holiday Policy':'公共假期政策','Default Probation Period':'默认试用期','Default Notice Period':'默认通知期','Salary Payment Day':'发薪日','Outstation Allowance Rate':'外勤津贴率','Employer EPF No.':'雇主EPF号码','Employer PERKESO No.':'雇主PERKESO号码','Employer LHDN No.':'雇主LHDN号码','Save Settings':'保存设置',
- 'Pending Approval':'待批准','Approved':'已批准','Rejected':'已拒绝','Paid':'已支付','Draft':'草稿','Submitted':'已提交','Closed':'已关闭','Active':'在职','Resigned':'已离职','Permanent':'永久','Probation':'试用','Part-Time':'兼职','Fixed Term':'固定期限','Bank Transfer':'银行转账','Cash':'现金','Not Applicable':'不适用','Search':'搜索','Action':'操作','Files':'文件','Amount':'金额','Total':'总计','Employee':'员工','Type':'类型','Description':'说明','Category':'类别','Supplier':'供应商','Reference':'参考编号','Save':'保存','Cancel':'取消','Close':'关闭','Continue Working':'继续工作','Backup Now':'立即备份','Restore JSON':'恢复JSON','Exit System':'退出系统','Language':'语言'
- }
-};
-const _gmeTextOriginal=new WeakMap();
-function gmeTranslateTextNode(node,lang){if(!node||node.nodeType!==3)return;let original=_gmeTextOriginal.get(node);if(original===undefined){original=node.nodeValue;_gmeTextOriginal.set(node,original)}if(lang==='en'){node.nodeValue=original;return}const trimmed=original.trim();if(!trimmed)return;const translated=GME_I18N[lang]?.[trimmed];if(translated){const lead=original.match(/^\s*/)?.[0]||'';const trail=original.match(/\s*$/)?.[0]||'';node.nodeValue=lead+translated+trail}}
-function gmeTranslateElement(root,lang){if(!root)return;const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{const p=n.parentElement;if(!p||['SCRIPT','STYLE','TEXTAREA'].includes(p.tagName))return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT}});let n;while(n=walker.nextNode())gmeTranslateTextNode(n,lang);root.querySelectorAll?.('[placeholder],[title],[aria-label]').forEach(el=>{['placeholder','title','aria-label'].forEach(attr=>{if(!el.hasAttribute(attr))return;const key='i18nOriginal'+attr.replace('-','');if(!el.dataset[key])el.dataset[key]=el.getAttribute(attr);const original=el.dataset[key];el.setAttribute(attr,lang==='en'?original:(GME_I18N[lang]?.[original]||original))})})}
-function setLanguage(lang='en'){if(!['en','ms','zh'].includes(lang))lang='en';localStorage.setItem(GME_LANG_KEY,lang);document.documentElement.lang=lang==='zh'?'zh-CN':lang;document.querySelectorAll('.language-switcher').forEach(s=>s.value=lang);gmeTranslateElement(document.body,lang)}
-function currentLanguage(){return localStorage.getItem(GME_LANG_KEY)||'en'}
-const _gmeOriginalRefreshAll=refreshAll;refreshAll=function(){const r=_gmeOriginalRefreshAll.apply(this,arguments);setTimeout(()=>setLanguage(currentLanguage()),0);return r}
-const _gmeOriginalShowPage=showPage;showPage=function(){const r=_gmeOriginalShowPage.apply(this,arguments);setTimeout(()=>setLanguage(currentLanguage()),0);return r}
-const _gmeObserver=new MutationObserver(mutations=>{const lang=currentLanguage();if(lang==='en')return;for(const m of mutations)for(const node of m.addedNodes)if(node.nodeType===1)gmeTranslateElement(node,lang);else if(node.nodeType===3)gmeTranslateTextNode(node,lang)});
-window.addEventListener('DOMContentLoaded',()=>{setLanguage(currentLanguage());_gmeObserver.observe(document.body,{childList:true,subtree:true})});
+(async function init(){
+  document.documentElement.dataset.theme=localStorage.getItem("gme_theme")||"light";
+  $("themeSelect").value=document.documentElement.dataset.theme;
+  await openDB();
+  await loadDashboard();
+  if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+})();
 </script>
-</body></html>
+</body>
+</html>
