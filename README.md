@@ -1,47 +1,12 @@
-# CY Smart Worksheet
+# GME HRMS Professional v4.5 PWA
 
-## Upload to GitHub Pages
+GitHub Pages-ready HRMS with English (default), Bahasa Melayu, and Chinese language switching.
 
-1. Create a new GitHub repository.
-2. Upload these files to the repository root:
-   - `index.html`
-   - `manifest.json`
-   - `sw.js`
-3. Open **Settings → Pages**.
-4. Under **Build and deployment**, choose **Deploy from a branch**.
-5. Select the `main` branch and `/ (root)`.
-6. Save and wait for GitHub to provide the Pages link.
+## Install
+Upload all files in this folder to the root of your GitHub repository, then enable GitHub Pages from the main branch.
 
-## Main features
+## Language
+Use the language selector in the top bar or side menu. The selected language is saved in the browser. English remains the default for new devices.
 
-- Multiple worksheets
-- Search and open saved worksheets
-- IndexedDB browser storage
-- Manual save and 10-second autosave
-- Add rows and columns in bulk
-- Paste cells copied from Excel
-- SUM, AVERAGE, MIN, MAX and COUNT formulas by column
-- Attachments
-- Excel, CSV, PDF/Print and JSON export
-- Light, dark and GME themes
-- PWA installation and offline support after first visit
-
-## Important storage note
-
-Data is stored inside the browser and device used to open the GitHub Pages site.  
-Use **JSON Backup** to transfer a worksheet to another device or browser.
-
-## Excel export note
-
-Excel export loads SheetJS from a public CDN. The first Excel export requires internet access.
-
-
-## Excel export naming
-
-- Excel filename: `Title_Company Name.xlsx`
-- Excel worksheet tab: the worksheet `Title`
-- Excel automatically limits worksheet tab names to 31 characters. Invalid tab characters are removed.
-
-
-## Excel Import
-Import .xlsx/.xls files. First row becomes headers and remaining rows become worksheet data.
+## Privacy
+Do not upload employee JSON backups or attachments to a public GitHub repository. Application records remain in the browser until exported.
